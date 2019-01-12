@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_round">
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightgray"
+        android:layout_below="@+id/toolbar"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tv_invoiceNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_button_black1"
+                android:padding="8dp"
+                android:textSize="18dp"
+                android:text="Invoice No : 1234566"
+                />
+
+
+            <RelativeLayout
+                android:id="@+id/rl_mapp"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@+id/tv_invoiceNo"
+                android:visibility="visible"
+                >
+
+                <fragment
+                    android:id="@+id/map3"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/iv_mapp"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@+id/tv_invoiceNo"
+                android:visibility="gone"
+                />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_mapp"
+               android:padding="10dp"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rl_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="10dp"
+                    >
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@mipmap/avatar"
+                        app:civ_border_color="@color/app_button_black1"
+                        app:civ_border_width="1dp"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tv_driver_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/app_button_black1"
+                        android:text="Abcd Xyz"
+                        android:layout_toRightOf="@+id/imageView"
+                        android:paddingLeft="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_car_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mini - BMW A10"
+                        android:layout_below="@+id/tv_driver_name"
+                        android:layout_toRightOf="@+id/imageView"
+                        android:paddingLeft="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_car_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/app_button_black1"
+                        android:text="OD04 2552"
+                        android:layout_below="@+id/tv_car_name"
+                        android:layout_toRightOf="@+id/imageView"
+                        android:paddingLeft="5dp"
+                        />
+
+
+                    <RatingBar
+                        android:id="@+id/rating_driver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="1"
+                        android:rating="3"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_below="@+id/tv_car_number"
+                        android:layout_toRightOf="@+id/imageView"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tv_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/green"
+                        android:text="Success"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tv_by_me"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/rating_driver"
+                        android:layout_alignParentBottom="true"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="5dp"
+                        android:text="- Rated by me"
+                        />
+
+                </RelativeLayout>
+
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+                    android:layout_below="@+id/rl_1"
+                    />
+
+
+                <RelativeLayout
+                    android:id="@+id/rl_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_pickup_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4:30 PM"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_pickup_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:drawableLeft="@mipmap/red_marker"
+                        android:maxLines="3"
+                        android:textSize="12sp"
+                        android:layout_below="@+id/tv_pickup_time"
+                        android:text="105 , D. H. Road , Kolkata"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_drop_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="5:30 PM"
+                        android:layout_below="@+id/tv_pickup_address"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_drop_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@mipmap/green_marker"
+                        android:layout_below="@+id/tv_drop_time"
+                        android:layout_marginTop="5dp"
+                        android:maxLines="3"
+                        android:textSize="12sp"
+                        android:text="105 , D. H. Road , Kolkata"
+                        />
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+                    android:layout_below="@+id/rl_2"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/rl_211"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view2"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_total_distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tv_total_ride_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        />
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view211"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+                    android:layout_below="@+id/rl_211"
+                    />
+
+
+                <RelativeLayout
+                    android:id="@+id/rl_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:layout_below="@+id/view211"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_hh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/app_button_black1"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:text="Fare Details :"
+                        />
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_21"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_hh"
+                        android:paddingTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Ride Fare :"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_ride_fare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Rs. 200.00"
+                            />
+
+
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_31"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_21"
+                        android:animateLayoutChanges="true"
+                        android:paddingTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Guider Fees:"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_guide_fees"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Rs. 100.00"
+                            />
+
+
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_311"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_31"
+                        android:animateLayoutChanges="true"
+                        android:paddingTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Coupon Discount:"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_coupon_amt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Rs. 100.00"
+                            />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_41"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_311"
+                        android:paddingTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Tax :"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_tax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Rs. 50.00"
+                            />
+
+
+
+                    </RelativeLayout>
+
+
+                    <View
+                        android:id="@+id/v_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:background="@mipmap/dotted_bar"
+                        android:layout_below="@+id/rl_41"
+                        android:layout_marginTop="10dp"
+                        />
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_51"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/v_1"
+                        android:paddingTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:textStyle="bold"
+                            android:text="Total :"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:textStyle="bold"
+                            android:text="Rs. 350.00"
+                            />
+
+
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_61"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_51"
+                        android:paddingTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Round Off :"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_roundOff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="+0.00"
+                            />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_71"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_61"
+                        android:paddingTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:textStyle="bold"
+                            android:text="Grand Total :"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_g_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:textStyle="bold"
+                            android:text="Rs. 350.00"
+                            />
+
+
+                    </RelativeLayout>
+
+
+
+
+                </RelativeLayout>
+
+
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/rl_3"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/tv_payment_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_below="@+id/view3"
+                    android:paddingTop="10dp"
+                    android:text="Payment Mode : Cash"
+                    />
+
+
+
+
+            </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>
+

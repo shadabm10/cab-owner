@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/iv_banner"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/big_banner"
+                />
+
+            <TextView
+                android:id="@+id/tv_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_button_black1"
+                android:textSize="16sp"
+                android:layout_below="@+id/iv_banner"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:padding="15dp"
+                android:gravity="center"
+                android:text="Contact us with the below email for book any big shuttle and bus (AC and Non AC both)"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_button_black1"
+                android:textSize="16sp"
+                android:layout_below="@+id/tv_1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:autoLink="email"
+                android:text="info@ugocabs.com"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_or"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="OR"
+                />
+
+
+
+            <LinearLayout
+                android:id="@+id/ll_mid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_centerInParent="true"
+                android:background="@color/white"
+                android:layout_below="@+id/tv_or"
+                android:layout_marginTop="15dp"
+                >
+
+                <EditText
+                    android:id="@+id/input_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_name"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:background="@color/white"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+                    />
+
+                <EditText
+                    android:id="@+id/input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/hint_email"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+                    />
+
+                <EditText
+                    android:id="@+id/input_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:padding="10dp"
+                    android:hint="@string/hint_mobile"
+                    android:gravity="center"
+                    android:maxLength="10"
+                    android:background="@color/white"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+                    />
+
+
+                <EditText
+                    android:id="@+id/input_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:hint="Your message"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+
+                    />
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/action_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:text="SUBMIT"
+                android:textColor="@color/white"
+                android:background="@color/green"
+                android:layout_below="@+id/ll_mid"
+                />
+
+
+
+
+
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+</RelativeLayout>

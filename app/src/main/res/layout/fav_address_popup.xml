@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            >
+
+            <RadioButton
+                android:id="@+id/radio_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HOME"
+                android:checked="true"
+                android:layout_weight="1"
+                android:buttonTint="@color/green"
+                />
+
+            <RadioButton
+                android:id="@+id/radio_work"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WORK"
+                android:layout_weight="1"
+                android:buttonTint="@color/green"
+                />
+
+            <RadioButton
+                android:id="@+id/radio_others"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OTHERS"
+                android:layout_weight="1"
+                android:buttonTint="@color/green"
+                />
+
+        </RadioGroup>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="Enter title"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_icons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_home"
+            />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_icons"
+            android:textSize="14sp"
+            android:paddingLeft="5dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:layout_alignParentRight="true"
+            android:text="ADD"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_button_black1"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:layout_toLeftOf="@+id/tv_add"
+            android:layout_marginRight="10dp"
+            android:text="CANCEL"
+            />
+        l
+
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

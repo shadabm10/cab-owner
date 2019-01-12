@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_button_black1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Select cancel reason :"
+            />
+
+        <RadioGroup android:id="@+id/radioGroup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio1"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason1">
+
+            </RadioButton>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio2"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason2"
+                >
+
+            </RadioButton>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio3"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason3">
+            </RadioButton>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio4"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason4">
+            </RadioButton>
+
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio5"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason5">
+            </RadioButton>
+
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio6"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason6">
+            </RadioButton>
+
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio7"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason7">
+            </RadioButton>
+
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio8"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason8">
+            </RadioButton>
+
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio9"
+                android:buttonTint="@color/green"
+                android:text="@string/user_cancel_reason9">
+            </RadioButton>
+
+
+        </RadioGroup>
+
+
+        <EditText
+            android:id="@+id/edt_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Write reason"
+            />
+
+
+
+        <Button
+            android:id="@+id/bt_cancel_booking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:background="@color/green"
+            android:textColor="@color/white"
+            android:text="Cancel Booking"
+            />
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

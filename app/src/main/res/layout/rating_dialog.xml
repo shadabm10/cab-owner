@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/relative_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green"
+        android:padding="10dp"
+        >
+       <TextView
+           android:id="@+id/tv_11"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textColor="@color/white"
+           android:textSize="20sp"
+           android:textStyle="bold"
+           android:layout_centerHorizontal="true"
+           android:text="Fare Details :"
+           />
+
+        <RelativeLayout
+            android:id="@+id/relative_fare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_11"
+            android:padding="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:text="Fare :"
+                />
+
+            <TextView
+                android:id="@+id/tv_fare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="100.00"
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_tax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relative_fare"
+            android:padding="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:text="GST :"
+                />
+
+            <TextView
+                android:id="@+id/tv_taxAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="100.00"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/relative_guider_fee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relative_tax"
+            android:padding="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:text="Guider Fee :"
+                />
+
+            <TextView
+                android:id="@+id/tv_guideFee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="100.00"
+                />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/viewDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white"
+            android:layout_below="@+id/relative_guider_fee"
+            />
+
+
+        <RelativeLayout
+            android:id="@+id/relative_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewDivider"
+            android:padding="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:textStyle="bold"
+                android:text="Total Fare :"
+                />
+
+            <TextView
+                android:id="@+id/tv_totalFare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textStyle="bold"
+                android:text="200.00"
+                />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:layout_below="@+id/relative_top"
+        >
+
+
+        <TextView
+            android:id="@+id/tv_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Rate driver :"
+            />
+
+
+        <RatingBar
+            android:id="@+id/rating_driver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="1"
+            android:rating="0"
+            style="?android:attr/ratingBarStyle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tv_1"
+            />
+
+
+        <EditText
+            android:id="@+id/edt_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rating_driver"
+            android:layout_marginTop="20dp"
+            android:hint="Comment here"
+            />
+
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/green"
+            android:textColor="@color/white"
+            android:text="@string/submit"
+            android:layout_below="@+id/edt_comment"
+            android:layout_marginTop="20dp"
+            />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

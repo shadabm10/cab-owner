@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        >
+
+
+        <RelativeLayout
+            android:id="@+id/rl_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Guider Needed / Not"
+                />
+
+            <CheckBox
+                android:id="@+id/checkbox_guider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_below="@+id/rl_1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Ride Fare :"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_ride_fare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Rs. 200.00"
+                />
+
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_below="@+id/rl_2"
+            android:animateLayoutChanges="true"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Guider Fees:"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_guide_fees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Rs. 100.00"
+                />
+
+
+
+        </RelativeLayout>
+
+
+
+
+        <RelativeLayout
+            android:id="@+id/rl_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_below="@+id/rl_3"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Tax :"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_tax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Rs. 50.00"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_coupon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_below="@+id/rl_4"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Coupon Amount :"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_coupon_amt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:text="Rs. 50.00"
+                />
+
+
+
+        </RelativeLayout>
+
+
+
+        <View
+            android:id="@+id/v_1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightgray"
+            android:layout_below="@+id/rl_coupon"
+            />
+
+
+        <RelativeLayout
+            android:id="@+id/rl_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_below="@+id/v_1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:textStyle="bold"
+                android:text="Total :"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="16sp"
+                android:textColor="@color/app_button_black1"
+                android:textStyle="bold"
+                android:text="Rs. 350.00"
+                />
+
+
+
+        </RelativeLayout>
+
+
+
+
+        <Button
+            android:id="@+id/btn_gotit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/app_button_black1"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:text="Got it"
+            />
+
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    >
+
+
+    <RelativeLayout
+        android:id="@+id/rl_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_button_black1"
+                android:textSize="14sp"
+                android:text="1 hour"
+                />
+
+            <TextView
+                android:id="@+id/tv_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_button_black1"
+                android:textSize="14sp"
+                android:text="15 Km"
+                />
+
+            <TextView
+                android:id="@+id/tv_guide_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_button_black1"
+                android:textSize="14sp"
+                android:text="*Guide charges : 100.00 (excluded)"
+                />
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_estimate_fare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/checkbox"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginRight="15dp"
+                android:textColor="@color/app_button_black1"
+                android:text="Rs 1500"
+                />
+
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:buttonTint="@color/green"
+                android:checked="true"
+                android:padding="5dp"
+                />
+
+            <!--<RadioButton
+                android:id="@+id/radio_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:buttonTint="@color/green"
+                android:checked="true"
+                android:padding="5dp"
+                />-->
+
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

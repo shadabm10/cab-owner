@@ -1,0 +1,83 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/g_1"
+        >
+
+        <item
+            android:id="@+id/book_your_ride"
+            android:checked="true"
+            android:title="Book Your Ride"
+            android:icon="@mipmap/book_your_ride"
+            />
+
+
+       <!-- <item
+            android:id="@+id/track_your_ride"
+            android:checked="false"
+            android:title="Track Your Ride"
+            android:icon="@mipmap/track_your_ride"
+            />-->
+
+
+        <item
+            android:id="@+id/history"
+            android:checked="false"
+            android:title="Your Trip"
+            android:icon="@mipmap/history"
+            />
+
+        <item
+            android:id="@+id/cabDetails"
+            android:checked="false"
+            android:title="Cab Details"
+            android:icon="@mipmap/carss"
+            />
+
+
+        <item
+            android:id="@+id/review"
+            android:checked="false"
+            android:title="Review &amp; Rating"
+            android:icon="@mipmap/reviews"
+            />
+
+
+        <item
+            android:id="@+id/missedcall"
+            android:checked="false"
+            android:title="Missed Call Service"
+            android:icon="@mipmap/missedcall"
+            />
+
+
+       <!-- <item
+            android:id="@+id/settings"
+            android:checked="false"
+            android:title="Settings"
+            android:icon="@mipmap/settings"
+            />-->
+
+
+<!--
+        <item
+            android:id="@+id/big_cab"
+            android:checked="false"
+            android:title="Big"
+            android:icon="@mipmap/icon_big"
+            />
+-->
+
+
+        <item
+            android:id="@+id/help"
+            android:checked="false"
+            android:title="Help"
+            android:icon="@mipmap/help"
+            />
+
+
+
+    </group>
+
+</menu>

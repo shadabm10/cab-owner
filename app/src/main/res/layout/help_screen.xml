@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:background="@color/yellow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:tint="#ffffff"
+            android:id="@+id/back"
+            android:layout_margin="20dp"
+            android:src="@mipmap/back"
+            android:layout_width="20dp"
+
+            android:layout_height="20dp" />
+
+
+        <TextView
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            android:textColor="#ffffff"
+            android:layout_toRightOf="@+id/back"
+            android:text="Driver Help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/ll_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:layout_below="@+id/toolbar"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:background="@drawable/bg_round">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/avatar"
+            app:civ_border_color="@color/app_button_black1"
+            app:civ_border_width="1dp"
+            />
+
+
+        <TextView
+            android:id="@+id/id_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingLeft="4dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:layout_toLeftOf="@+id/tv_status"
+            android:text="123456"
+            />
+
+        <TextView
+            android:id="@+id/tv_pickup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageView"
+            android:layout_below="@+id/id_"
+            android:layout_marginRight="8dp"
+            android:paddingLeft="8dp"
+            android:maxLines="2"
+            android:drawableLeft="@mipmap/red_marker"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_alignParentRight="true"
+            />
+
+<!--
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="8dp"
+            android:layout_below="@+id/tv_pickup"
+            />
+-->
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_details"
+        android:layout_margin="10dp"
+        >
+        <EditText
+            android:id="@+id/edt_description"
+            android:layout_width="match_parent"
+            android:layout_height="150sp"
+            android:hint="Description *"
+            android:gravity="start"
+            android:textSize="14sp"
+            android:textColorHint="@color/grey_text"
+
+            android:padding="15sp"/>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_attach"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/rl_desc"
+        android:orientation="horizontal">
+
+
+
+        <TextView
+            android:id="@+id/attach_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   ATTACHMENT   "
+            android:background="@drawable/button"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textColor="#ffffff"
+            />
+        <TextView
+            android:id="@+id/attach_data_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:padding="8dp"
+            android:text="File size limit : 300kb"
+            />
+
+<!--
+        <ImageView
+            android:id="@+id/image_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/cross"
+            android:contentDescription="@string/app_name" />
+-->
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/ll_attach"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20sp"
+        android:background="@drawable/blue_back">
+        <TextView
+            android:id="@+id/tv_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Submit "
+            android:textColor="#ffffff"
+            android:layout_marginRight="5dp"
+
+            android:gravity="center"
+            android:padding="10dp"
+            />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

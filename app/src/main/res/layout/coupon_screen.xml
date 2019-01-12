@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        >
+
+
+        <include
+            layout="@layout/toolbar"
+            android:id="@+id/toolbar"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_with_white"
+            android:animateLayoutChanges="true"
+            >
+
+            <EditText
+                android:id="@+id/edt_coupon_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:padding="10dp"
+                android:layout_toLeftOf="@+id/iv_cancel"
+                android:hint="@string/hint_enter_coupon_code"
+                />
+
+
+            <ImageView
+                android:id="@+id/iv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="10dp"
+                android:src="@mipmap/cancel"
+                />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="14sp"
+            />
+
+
+        <Button
+            android:id="@+id/btn_apply_coupon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/green"
+            android:textColor="@color/white"
+            android:text="Apply Coupon"
+            />
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

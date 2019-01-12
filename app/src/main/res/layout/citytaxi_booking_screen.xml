@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/rl_bottom"
+        >
+
+        <fragment
+            android:id="@+id/map3"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rl_addressBar"
+
+            />
+
+
+        <RelativeLayout
+            android:id="@+id/rl_addressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightgray"
+                />
+
+            <ImageView
+                android:id="@+id/image_root"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/location_area"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toRightOf="@+id/image_root"
+                android:paddingTop="5dp"
+                >
+
+                <TextView
+                    android:id="@+id/tv_pickup_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/app_button_black1"
+                    android:maxLines="2"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="start"
+                    android:text="23, abc lane, kolkata"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_drop_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/app_button_black1"
+                    android:maxLines="2"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="start"
+                    android:text="23, abc lane, kolkata"
+                    />
+
+
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_reached_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:padding="5dp"
+            android:textColor="@color/app_button_black1"
+            android:background="@drawable/circle"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:text="5\nmin"
+            />
+
+
+    </RelativeLayout>
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:animateLayoutChanges="true"
+        >
+
+        <RelativeLayout
+            android:id="@+id/rl_loader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="50dp"
+            android:visibility="gone"
+            >
+
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/avi14"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:visibility="visible"
+                app:indicatorName="LineScaleIndicator"
+                app:indicatorColor="@color/light_green"
+                android:layout_centerInParent="true"
+                />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_in_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:visibility="visible"
+            >
+
+
+            <RelativeLayout
+                android:id="@+id/rl_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:gravity="center_vertical"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        >
+
+                        <ImageView
+                            android:id="@+id/img1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/green_marker"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/img1"
+                            android:paddingLeft="5dp"
+                            android:textSize="12sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Distance : "
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_estimate_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/img1"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/app_button_black1"
+                            android:layout_below="@+id/tv_distance"
+                            android:textSize="12sp"
+                            android:text="Appx. Time : "
+                            />
+
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/lightgray"
+                        />
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_paymentMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        >
+
+                        <TextView
+                            android:id="@+id/tv_paymode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/green"
+                            android:text="@string/paymentMode"
+                            android:layout_centerHorizontal="true"
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_paymentMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/green"
+                            android:text="Cash"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/tv_paymode"
+                            android:textSize="12sp"
+                            android:paddingBottom="5dp"
+                            />
+
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightgray"
+                android:layout_below="@+id/rl_distance"
+                />
+
+            <RelativeLayout
+                android:id="@+id/rl_estimate_fare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:layout_below="@+id/view1"
+                >
+
+                <ImageView
+                    android:id="@+id/img2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/fare_estimate"
+                    android:layout_centerVertical="true"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_estimate_fare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/img2"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/app_button_black1"
+                    android:text="Fare Estimate : "
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/green"
+                    android:text="@string/details"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    />
+
+            </RelativeLayout>
+
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightgray"
+                android:layout_below="@+id/rl_estimate_fare"
+                />
+
+
+            <LinearLayout
+                android:id="@+id/ll_guider_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view2"
+                android:paddingLeft="5dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rl_guider_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+                    <CheckBox
+                        android:id="@+id/checkbox_guider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:buttonTint="@color/green"
+                        android:text="Guider Needed"
+                        />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/lightgray"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/rl_coupon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        >
+
+                        <ImageView
+                            android:id="@+id/iv_coupon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/coupon"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textColor="@color/green"
+                            android:layout_toRightOf="@+id/iv_coupon"
+                            android:text="Apply Coupon"
+                            />
+
+
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@+id/ll_guider_coupon"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    >
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_back"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/yellow"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="@string/back"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/white"
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_confirm_booking"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/green"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="@string/confirm_booking"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/white"
+                            />
+
+
+                    </RelativeLayout>
+
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_in_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:visibility="gone"
+            >
+
+
+            <RelativeLayout
+                android:id="@+id/rl_driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@mipmap/avatar"
+                    app:civ_border_color="@color/black"
+                    app:civ_border_width="1dp"
+                    android:layout_margin="5dp"
+                    />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/profile_image"
+                    android:padding="10dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_driver_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textColor="@color/app_button_black1"
+                        android:text="Allen Cristt"
+                        />
+
+                    <RatingBar
+                        android:id="@+id/rating_driver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="0.1"
+                        android:rating="3.5"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_below="@+id/tv_driver_name"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tv_car_name_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/app_button_black1"
+                        android:layout_below="@+id/rating_driver"
+                        android:layout_marginTop="5dp"
+                        android:text="Swift Desire\nWB 04 9999"
+                        />
+
+
+
+                    <TextView
+                        android:id="@+id/tv_otp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/green"
+                        android:layout_alignParentRight="true"
+                        android:text="OTP : 7878"
+                        />
+
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_call_driver"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:layout_below="@+id/rl_driver"
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightgray"/>
+
+                <ImageView
+                    android:id="@+id/iv_callicon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/call_driver"
+                    android:layout_toLeftOf="@+id/tv_calldriver"
+                    android:layout_centerVertical="true"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_calldriver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/call_driver"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/app_button_black1"
+                    android:paddingLeft="15dp"
+                    />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_cancel_booking"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/app_button_black1"
+                android:layout_below="@+id/rl_call_driver"
+                android:animateLayoutChanges="true"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/cancel_booking"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/white"
+                    />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

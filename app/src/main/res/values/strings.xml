@@ -1,0 +1,189 @@
+<resources>
+    <string name="app_name">U Go</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+   <!-- <string name="map_api_key">AIzaSyBfxTiNTShtn2EE8G7hPrZUK-IlC8wPfBc</string>
+    <string name="place_api_key">AIzaSyBjKT9ejDeRSglKOjQs0CTPw1QNmjzXun8</string>-->
+    <string name="map_api_key">AIzaSyDIKxEj9TzalzfhG7r5tA83EbmZCWvXeow</string>
+    <string name="place_api_key">AIzaSyDIKxEj9TzalzfhG7r5tA83EbmZCWvXeow</string>
+    <string name="camera_permission_error">Camera Permission error</string>
+
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose From Gallery</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_option">Select Option</string>
+
+    <string name="register">REGISTER</string>
+    <string name="loading">loading</string>
+    <string name="signin">SIGN IN</string>
+    <string name="signup">SIGN UP</string>
+    <string name="submit">SUBMIT</string>
+    <string name="resend_otp">Resend Otp</string>
+    <string name="send_otp">Send Otp</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="back">BACK</string>
+    <string name="confirm_booking">CONFIRM BOOKING</string>
+    <string name="paymentMode">Payment Mode</string>
+    <string name="details">Details</string>
+    <string name="logout">LOGOUT</string>
+    <string name="ridelater">RIDE LATER</string>
+    <string name="ridenow">RIDE NOW</string>
+    <string name="continuee">CONTINUE</string>
+    <string name="cancel_booking">CANCEL BOOKING</string>
+    <string name="call_driver">Call Driver</string>
+
+    <string name="CityTaxi">City Taxi</string>
+    <string name="Outstation">Outstation</string>
+    <string name="Rental">Rental</string>
+    <string name="SpecialFare">Special Fare</string>
+
+
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_mobile">Mobile Number(10 digits)</string>
+    <string name="hint_password">Password(Min. 6 character)</string>
+    <string name="hint_re_password">Re-Enter Password</string>
+    <string name="hint_otp">Enter OTP</string>
+    <string name="hint_enter_mobile">Enter Mobile Number</string>
+    <string name="hint_enter_password">Enter Password</string>
+    <string name="hint_enter_coupon_code">Enter Coupon Code</string>
+
+    <string name="msg1">Otp send to your registered mobile number.</string>
+
+    <string name="msg_enter_name">Enter name</string>
+    <string name="msg_enter_email">Enter email</string>
+    <string name="msg_enter_valid_email">Enter valid email</string>
+    <string name="msg_enter_mobile">Enter mobile number</string>
+    <string name="msg_enter_10digitmobile">Enter 10-digit mobile number</string>
+    <string name="msg_enter_password">Enter password</string>
+    <string name="msg_enter_6character_password">Enter 6 character password</string>
+    <string name="msg_enter_confirm_password">Re-Enter password</string>
+    <string name="msg_password_not_same">Password not same</string>
+    <string name="msg_otp">Enter 6-digit Otp</string>
+    <string name="round_trip_msg">One-way fares are not available for this route. You can still travel one way, round trip fares apply.</string>
+
+    <string name="msg_paymentMyJioMode">We are coming soon with MY JIO.\nKindly try with other available payment option.</string>
+    <string name="msg_cancelDriver">Your booking has been cancelled. Kindly retry.</string>
+
+
+    ///////////////////////////////////
+
+    <string name="title_otp_verification">OTP Verification</string>
+    <string name="title_confirm_booking">Request Ride</string>
+    <string name="title_rental_booking">Rental Booking</string>
+    <string name="title_outstation_booking">Outstation Booking</string>
+    <string name="title_edit_profile">Edit Profile</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="title_details">Details</string>
+    <string name="title_estimate_cost_details">Estimate Cost Details</string>
+    <string name="title_payment_mode">Payment Mode</string>
+    <string name="title_coupon">Apply Coupon</string>
+
+
+
+
+
+    //////////////////////////////////////
+
+    <string-array name="time_list">
+        <item>12:00 AM</item>
+        <item>12:30 AM</item>
+        <item>1:00 AM</item>
+        <item>1:30 AM</item>
+        <item>2:00 AM</item>
+        <item>2:30 AM</item>
+        <item>3:00 AM</item>
+        <item>3:30 AM</item>
+        <item>4:00 AM</item>
+        <item>4:30 AM</item>
+        <item>5:00 AM</item>
+        <item>5:30 AM</item>
+        <item>6:00 AM</item>
+        <item>6:30 AM</item>
+        <item>7:00 AM</item>
+        <item>7:30 AM</item>
+        <item>8:00 AM</item>
+        <item>8:30 AM</item>
+        <item>9:00 AM</item>
+        <item>9:30 AM</item>
+        <item>10:00 AM</item>
+        <item>10:30 AM</item>
+        <item>11:00 AM</item>
+        <item>11:30 AM</item>
+
+        <item>12:00 PM</item>
+        <item>12:30 PM</item>
+        <item>1:00 PM</item>
+        <item>1:30 PM</item>
+        <item>2:00 PM</item>
+        <item>2:30 PM</item>
+        <item>3:00 PM</item>
+        <item>3:30 PM</item>
+        <item>4:00 PM</item>
+        <item>4:30 PM</item>
+        <item>5:00 PM</item>
+        <item>5:30 PM</item>
+
+        <item>6:00 PM</item>
+        <item>6:30 PM</item>
+        <item>7:00 PM</item>
+        <item>7:30 PM</item>
+        <item>8:00 PM</item>
+        <item>8:30 PM</item>
+        <item>9:00 PM</item>
+        <item>9:30 PM</item>
+        <item>10:00 PM</item>
+        <item>10:30 PM</item>
+        <item>11:00 PM</item>
+        <item>11:30 PM</item>
+
+    </string-array>
+
+
+
+
+
+    ///////////////////////
+    <string name="api">api</string>
+
+    <string name="registration">registration</string>
+    <string name="verifyotp">verify_otp</string>
+    <string name="login">login</string>
+    <string name="forgetpass">forgetpass</string>
+    <string name="resetpass">resetpass</string>
+    <string name="changepassword">change_password</string>
+    <string name="updateprofile">update_profile</string>
+    <string name="getnearestdriver">get_nearest_driver</string>
+    <string name="confirmbooking">confirm_booking</string>
+
+
+    //////////////////////////
+    <!--user cancel reason ...-->
+
+    <string name="user_cancel_reason1">Driver not reach</string>
+    <string name="user_cancel_reason2">Driver not found</string>
+    <string name="user_cancel_reason3">Driver not receive call</string>
+    <string name="user_cancel_reason4">My cab was getting late</string>
+    <string name="user_cancel_reason5">My cab was far away</string>
+    <string name="user_cancel_reason6">Driver denied duty</string>
+    <string name="user_cancel_reason7">Change in plan/mind</string>
+    <string name="user_cancel_reason8">Booking errors</string>
+    <string name="user_cancel_reason9">Other</string>
+
+
+    <!--user help text ...-->
+
+    <string name="user_help_text1">Driver rough behaviour</string>
+    <string name="user_help_text2">Driver is going the wrong way</string>
+    <string name="user_help_text3">Driver is not working as guide</string>
+    <string name="user_help_text4">Someone following us</string>
+    <string name="user_help_text5">High speed cab driving</string>
+    <string name="user_help_text6">Drunk driver</string>
+    <string name="user_help_text7">Cab not working</string>
+    <string name="user_help_text8">Other</string>
+
+
+
+</resources>
