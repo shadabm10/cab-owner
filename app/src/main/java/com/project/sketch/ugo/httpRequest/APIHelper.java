@@ -9,7 +9,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created  on 16/05/16.
+ * Created  on 10/01/19.
  */
 public class APIHelper {
 
@@ -23,10 +23,7 @@ public class APIHelper {
                 callback.onResponse(call, response);
             }
 
-            @Override
-            public void onFinalFailure(Call<T> call, Throwable t) {
-                callback.onFailure(call, t);
-            }
+
         });
     }
 

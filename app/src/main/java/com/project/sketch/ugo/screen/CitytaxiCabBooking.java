@@ -81,6 +81,7 @@ import com.project.sketch.ugo.utils.SharedPref;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.KeyManagementException;
@@ -88,6 +89,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -96,8 +98,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -110,8 +112,9 @@ import static com.project.sketch.ugo.utils.Constants.API_KEY;
 
 public class CitytaxiCabBooking extends AppCompatActivity implements
         OnMapReadyCallback {
-
+    float totalWithGuideMax,totalWithGuideMin,totalWithOutGuideMin,totalWithOutGuideMax;
     Toolbar toolbar;
+    String  TAG="main";
     private GoogleMap map = null;
     SupportMapFragment mapFrag;
     TextView tv_pickup_address, tv_drop_address, tv_distance, tv_estimate_time,
@@ -121,16 +124,16 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
             rl_cancel_booking, rl_loader;
     CheckBox checkbox_guider;
     RelativeLayout rl_paymentMode;
-
+    float toRotation;
     CircleImageView profile_image;
     TextView tv_driver_name, tv_car_name_number, tv_otp, tv_reached_time;
     RatingBar rating_driver;
     RelativeLayout rl_coupon;
-
+    boolean isMarkerRotating=false;
     LayerDrawable stars;
     GlobalClass globalClass;
     SharedPref sharedPref;
-
+    Marker m1;
     String booking_id;
     String guide_option = "N";
     String driver_phone_number;
@@ -206,28 +209,28 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
         tv_details = (TextView) findViewById(R.id.tv_details);
         rl_back = (RelativeLayout) findViewById(R.id.rl_back);
         rl_confirm_booking = (RelativeLayout) findViewById(R.id.rl_confirm_booking);
-        rl_addressBar = (RelativeLayout) findViewById(R.id.rl_addressBar);
-        checkbox_guider = (CheckBox) findViewById(R.id.checkbox_guider);
+        rl_addressBar = findViewById(R.id.rl_addressBar);
+        checkbox_guider =  findViewById(R.id.checkbox_guider);
         checkbox_guider.setChecked(false);
-        tv_reached_time = (TextView) findViewById(R.id.tv_reached_time);
+        tv_reached_time =  findViewById(R.id.tv_reached_time);
         tv_reached_time.setVisibility(View.GONE);
 
 
-        rl_paymentMode = (RelativeLayout) findViewById(R.id.rl_paymentMode);
-        rl_coupon = (RelativeLayout) findViewById(R.id.rl_coupon);
-        rl_in_1 = (RelativeLayout) findViewById(R.id.rl_in_1);
+        rl_paymentMode = findViewById(R.id.rl_paymentMode);
+        rl_coupon =  findViewById(R.id.rl_coupon);
+        rl_in_1 =  findViewById(R.id.rl_in_1);
         rl_in_1.setVisibility(View.GONE);
-        rl_in_2 = (RelativeLayout) findViewById(R.id.rl_in_2);
+        rl_in_2 =  findViewById(R.id.rl_in_2);
         rl_in_2.setVisibility(View.GONE);
-        rl_loader = (RelativeLayout) findViewById(R.id.rl_loader);
+        rl_loader =  findViewById(R.id.rl_loader);
         rl_loader.setVisibility(View.VISIBLE);
-        rl_call_driver = (RelativeLayout) findViewById(R.id.rl_call_driver);
-        rl_cancel_booking = (RelativeLayout) findViewById(R.id.rl_cancel_booking);
-        profile_image = (CircleImageView) findViewById(R.id.profile_image);
-        tv_driver_name = (TextView) findViewById(R.id.tv_driver_name);
-        tv_car_name_number = (TextView) findViewById(R.id.tv_car_name_number);
-        tv_otp = (TextView) findViewById(R.id.tv_otp);
-        rating_driver = (RatingBar) findViewById(R.id.rating_driver);
+        rl_call_driver =  findViewById(R.id.rl_call_driver);
+        rl_cancel_booking =  findViewById(R.id.rl_cancel_booking);
+        profile_image =  findViewById(R.id.profile_image);
+        tv_driver_name = findViewById(R.id.tv_driver_name);
+        tv_car_name_number =  findViewById(R.id.tv_car_name_number);
+        tv_otp =  findViewById(R.id.tv_otp);
+        rating_driver = findViewById(R.id.rating_driver);
 
         stars = (LayerDrawable) rating_driver.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.parseColor("#FFA100"), PorterDuff.Mode.SRC_ATOP); // for filled stars
@@ -249,12 +252,55 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
         setupLoader();
 
-        if (globalClass.isSpecialFareSelect){
-            getEstimateValueSpecialFare();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+
+            if (globalClass.getDriver() != null){
+
+                Driver driver = globalClass.getDriver();
+
+                tv_pickup_address.setText(driver.getPick_address());
+                tv_drop_address.setText(driver.getDrop_address());
+
+                globalClass.setDriver(globalClass.getDriver());
+                sharedPref.saveDriverInfo(globalClass.getDriver());
+
+                booking_id = driver.getBooking_id();
+
+
+                String booking_status = globalClass.getDriver().getBooking_status();
+
+
+                if (booking_status.equals("accepted")){
+                    rl_cancel_booking.setVisibility(View.VISIBLE);
+                }else if (booking_status.equals("reached")){
+                    rl_cancel_booking.setVisibility(View.GONE);
+                }
+
+                setDriverData(driver);
+
+                rl_in_1.setVisibility(View.GONE);
+
+                rl_in_2.startAnimation(show_animation);
+                rl_in_2.setVisibility(View.VISIBLE);
+
+                map.clear();
+
+                callForDriverLocation();
+
+            }
+
         }else {
-            special_booking_type = "city_taxi";
-            getEstimateValue();
+
+            if (globalClass.isSpecialFareSelect){
+                getEstimateValueSpecialFare();
+            }else {
+                special_booking_type = "city_taxi";
+                getEstimateValue();
+            }
         }
+
 
 
 
@@ -293,12 +339,12 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
                 if (guide_option.matches("Y")){
 
-                    float totalWithGuideMin = estimateData.getEstimate_fare()
+                     totalWithGuideMin = estimateData.getEstimate_fare()
                             + estimateData.getEstimate_guide_charge()
                             + estimateData.getTotal_fees_and_charges()
                             - globalClass.getCoupon_amount();
 
-                    float totalWithGuideMax = estimateData.getEstimate_fare_maximum()
+                     totalWithGuideMax = estimateData.getEstimate_fare_maximum()
                             + estimateData.getEstimate_guide_charge()
                             + estimateData.getTotal_fees_and_charges()
                             - globalClass.getCoupon_amount();
@@ -308,11 +354,11 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
                 }else {
 
-                    float totalWithOutGuideMin = estimateData.getEstimate_fare()
+                     totalWithOutGuideMin = estimateData.getEstimate_fare()
                             + estimateData.getTotal_fees_and_charges()
                             - globalClass.getCoupon_amount();
 
-                    float totalWithOutGuideMax = estimateData.getEstimate_fare_maximum()
+                     totalWithOutGuideMax = estimateData.getEstimate_fare_maximum()
                             + estimateData.getTotal_fees_and_charges()
                             - globalClass.getCoupon_amount();
 
@@ -430,7 +476,7 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
         MarkerOptions markerOptions1 = new MarkerOptions();
         markerOptions1.position(myLoc);
-        markerOptions1.icon( BitmapDescriptorFactory.fromBitmap(globalClass.cab_image));
+        markerOptions1.icon(BitmapDescriptorFactory.fromResource(R.mipmap.red_pin_marker));
         map.addMarker(markerOptions1);
 
         map.moveCamera(CameraUpdateFactory.newLatLng(myLoc));
@@ -494,12 +540,29 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
                 //guiderConfirmDialog();
 
                 if (globalClass.Later_Ride.matches("N")){
-                    progressDialog.show();
-                    callForBooking();
+
+                    if (sharedPref.getPaymentMode().matches(Constants.paymentMode_cash)){
+                        progressDialog.show();
+                        callForBooking();
+
+                    }
+                    else if(sharedPref.getPaymentMode().matches(Constants.paymentMode_Wallet)){
+                        checkWallet();
+                       // callForBooking();
+                    }
                 }else if (globalClass.Later_Ride.matches("Y")){
                     pDialog.show();
+                    if (sharedPref.getPaymentMode().matches(Constants.paymentMode_cash)){
 
-                    confirmBookingCity_taxi();
+                        confirmBookingCity_taxi();
+
+
+                    }
+                    else if  (sharedPref.getPaymentMode().matches(Constants.paymentMode_Wallet)){
+                        checkWallet();
+                        confirmBookingCity_taxi();
+                    }
+
 
                 }
 
@@ -519,6 +582,7 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
         });
 
 
+/*
         checkbox_guider.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -527,12 +591,12 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
                     guide_option = "Y";
 
-                    float totalWithGuideMin = estimateData.getEstimate_fare()
+                     totalWithGuideMin = estimateData.getEstimate_fare()
                             + estimateData.getEstimate_guide_charge()
                             + estimateData.getTotal_fees_and_charges()
                             - globalClass.getCoupon_amount();
 
-                    float totalWithGuideMax = estimateData.getEstimate_fare_maximum()
+                     totalWithGuideMax = estimateData.getEstimate_fare_maximum()
                             + estimateData.getEstimate_guide_charge()
                             + estimateData.getTotal_fees_and_charges()
                             - globalClass.getCoupon_amount();
@@ -544,11 +608,11 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
                     guide_option = "N";
 
-                    float totalWithOutGuideMin = estimateData.getEstimate_fare()
+                     totalWithOutGuideMin = estimateData.getEstimate_fare()
                             + estimateData.getTotal_fees_and_charges()
                             - globalClass.getCoupon_amount();
 
-                    float totalWithOutGuideMax = estimateData.getEstimate_fare_maximum()
+                     totalWithOutGuideMax = estimateData.getEstimate_fare_maximum()
                             + estimateData.getTotal_fees_and_charges()
                             - globalClass.getCoupon_amount();
 
@@ -560,6 +624,7 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
             }
         });
+*/
 
 
         rl_coupon.setOnClickListener(new View.OnClickListener() {
@@ -598,10 +663,8 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
                 if (sharedPref.getPaymentMode().matches(Constants.paymentMode_cash)){
                     tv_paymentMode.setText("Cash");
-                }else if (sharedPref.getPaymentMode().matches(Constants.paymentMode_paytm)){
-                    tv_paymentMode.setText("Paytm");
-                }else if (sharedPref.getPaymentMode().matches(Constants.paymentMode_jiomoney)){
-                    tv_paymentMode.setText("Jio Money");
+                }else if (sharedPref.getPaymentMode().matches(Constants.paymentMode_Wallet)){
+                    tv_paymentMode.setText("Wallet");
                 }
 
             }
@@ -662,9 +725,9 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
 
 
-                            float totalWithGuideMin = estimateData.getEstimate_fare()
+                             totalWithGuideMin = estimateData.getEstimate_fare()
                                     + estimateData.getTotal_fees_and_charges();
-                            float totalWithGuideMax = estimateData.getEstimate_fare_maximum()
+                             totalWithGuideMax = estimateData.getEstimate_fare_maximum()
                                     + estimateData.getTotal_fees_and_charges();
 
                             tv_estimate_fare.setText("Fare Estimate : ₹ "+(int)totalWithGuideMin +" - ₹ "+(int)totalWithGuideMax);
@@ -748,11 +811,11 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
 
 
-                            float totalWithOutGuideMin = estimateData.getEstimate_fare()
+                             totalWithOutGuideMin = estimateData.getEstimate_fare()
                                     + estimateData.getTotal_fees_and_charges()
                                     - globalClass.getCoupon_amount();
 
-                            float totalWithOutGuideMax = estimateData.getEstimate_fare_maximum()
+                             totalWithOutGuideMax = estimateData.getEstimate_fare_maximum()
                                     + estimateData.getTotal_fees_and_charges()
                                     - globalClass.getCoupon_amount();
 
@@ -813,7 +876,7 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
     private void callForBooking(){
 
         final int delay = 1000; // delay for 1 sec.
-        final int period = 15000; // repeat every 14 sec.
+        final int period = 14000; // repeat every 14 sec.
         timer = new Timer();
         counter = 1;
 
@@ -981,78 +1044,6 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
     }
 
 
-///////////////////////////// test
-
-    public void confirmbooking(){
-
-
-        String url = ApiClient.BASE_URL + Constants.confirmbooking;
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-
-        client.setSSLSocketFactory(
-                new SSLSocketFactory(getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
-
-        params.put(Constants.id, sharedPref.getUserId());
-        params.put(Constants.booking_type, special_booking_type);
-        params.put(Constants.outstation_type, "");
-        params.put(Constants.pickup_address, globalClass.PICUP_ADDRESS);
-        params.put(Constants.pickup_latitude, globalClass.PICKUP_LATLNG.latitude);
-        params.put(Constants.pickup_longitude, globalClass.PICKUP_LATLNG.longitude);
-        params.put(Constants.drop_address, globalClass.DROP_ADDRESS);
-        params.put(Constants.drop_latitude, globalClass.DROP_LATLNG.latitude);
-        params.put(Constants.drop_longitude, globalClass.DROP_LATLNG.longitude);
-        params.put(Constants.cab_variant_id, globalClass.Selected_Cab_Id);
-        params.put(Constants.payment_mode, sharedPref.getPaymentMode());
-        params.put(Constants.guide_option, guide_option);
-        params.put(Constants.scheduled_date, globalClass.Booking_later_time);
-        params.put(Constants.scheduled_time, globalClass.Booking_later_time);
-        params.put(Constants.later, globalClass.Later_Ride);
-        params.put(Constants.outstation_trip_starttime, "");
-        params.put(Constants.rental_distance_package, "");
-        params.put(Constants.coupon_applied, globalClass.getCoupon_applied());
-        params.put(Constants.coupon_code, globalClass.getCoupon_code());
-        params.put(Constants.coupon_amount, globalClass.getCoupon_amount());
-
-
-
-        Log.d(Constants.TAG , "update_profile - " + url);
-        Log.d(Constants.TAG , "update_profile - " + params.toString());
-
-        int DEFAULT_TIMEOUT = 30 * 1000;
-        client.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
-        client.post(url, params, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d(Constants.TAG, "update_profile- " + response.toString());
-
-                if (response != null) {
-                    try {
-
-
-
-
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
-
-            }
-
-        });
-
-
-    }
-
-
     public SSLContext getSslContext() {
 
         TrustManager[] byPassTrustManagers = new TrustManager[] { new X509TrustManager() {
@@ -1115,38 +1106,47 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
         sharedPref.saveRiding(true);
 
         sharedPref.saveDriver_id(driverData.getDid());
-        sharedPref.savePickup_addr(globalClass.PICUP_ADDRESS);
-        sharedPref.saveDrop_addr(globalClass.DROP_ADDRESS);
+        sharedPref.savePickup_addr(driverData.getPick_address());
+        sharedPref.saveDrop_addr(driverData.getDrop_address());
 
         tv_driver_name.setText(driverData.getName());
-        tv_car_name_number.setText(driverData.getCar_name()+"\n"+driverData.getCar_number());
+        tv_car_name_number.setText(driverData.getCar_name()
+                +"\n"+driverData.getCar_number());
         tv_otp.setText("OTP : "+driverData.getOtp());
 
         if (driverData.getRating() == null || driverData.getRating().equals(null)){
+
 
         }else {
             rating_driver.setRating(Float.parseFloat(driverData.getRating()));
         }
 
-        Picasso.with(this).load(driverData.getCar_image()).error(R.mipmap.avatar).into(profile_image, new com.squareup.picasso.Callback() {
-            @Override
-            public void onSuccess() {
-                //  Log.d("TAG", "onSuccess");
-            }
-            @Override
-            public void onError() {
-                //  Toast.makeText(mactivity, "An error occurred", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (!driverData.getCar_image().isEmpty()){
+
+            Picasso.with(this)
+                    .load(driverData.getCar_image())
+                    .error(R.mipmap.avatar)
+                    .into(profile_image, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            //  Log.d("TAG", "onSuccess");
+                        }
+                        @Override
+                        public void onError() {
+                            //  Toast.makeText(mactivity, "An error occurred", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        }
 
 
         rl_call_driver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // driverData.getPhone()
                 driver_phone_number = driverData.getPhone();
                 checkPermission();
+
             }
         });
 
@@ -1177,6 +1177,7 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
     LatLng driverLoc1;
     LatLng driverLoc2;
+
     private void getDriverLocation(){
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -1218,22 +1219,35 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
 
 
-                            float zoom = 16f;
-                            LatLng target = new LatLng(lati, longi);
+
+                            LatLng target =  globalClass.PICKUP_LATLNG;
 
                             map.clear();
 
                             MarkerOptions markerOptions1 = new MarkerOptions();
                             markerOptions1.position(target);
                             markerOptions1.title("Driver Location");
+                            markerOptions1.anchor(0.5f,0.5f);
                             markerOptions1.icon(BitmapDescriptorFactory.fromBitmap(globalClass.cab_image));
-                            map.addMarker(markerOptions1);
+                            m1= map.addMarker(markerOptions1);
+                            map.moveCamera(CameraUpdateFactory.newLatLng(target));
+                           //  CameraPosition position = new CameraPosition.Builder().target(target).zoom(zoom).build();
+                           // map.animateCamera(CameraUpdateFactory.newCameraPosition(position));
+                             map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                                    .target(map.getCameraPosition().target)
+                                    .zoom(16)
+                                    .bearing(30)
+                                    .tilt(45)
 
-                            CameraPosition position = new CameraPosition.Builder().target(target).zoom(zoom).build();
-                            map.animateCamera(CameraUpdateFactory.newCameraPosition(position));
-
+                                    .build()));
+                            MapUtils mapUtils = new MapUtils(CitytaxiCabBooking.this);
+                            mapUtils.drawPolyline(map, true);
                             getReachingTime(lati, longi);
 
+                            bearingBetweenLocations(driverLoc1,driverLoc2);
+                            toRotation = (float) bearingBetweenLocations(driverLoc1, driverLoc2);
+                            Log.d("TAG", "onResponse: " +toRotation);
+                            rotateMarker(m1, toRotation);
 
                         }else if (response.body().getStatus() == 2){
 
@@ -1267,8 +1281,57 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
 
     }
+    private double bearingBetweenLocations(LatLng latLng1,LatLng latLng2) {
 
+        double PI = 3.14159;
+        double lat1 = latLng1.latitude * PI / 180;
+        double long1 = latLng1.longitude * PI / 180;
+        double lat2 = latLng2.latitude * PI / 180;
+        double long2 = latLng2.longitude * PI / 180;
 
+        double dLon = (long2 - long1);
+
+        double y = Math.sin(dLon) * Math.cos(lat2);
+        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
+                * Math.cos(lat2) * Math.cos(dLon);
+
+        double brng = Math.atan2(y, x);
+
+        brng = Math.toDegrees(brng);
+        brng = (brng + 360) % 360;
+
+        return brng;
+    }
+    private void rotateMarker(final Marker marker, final float toRotation) {
+        if(!isMarkerRotating) {
+            final Handler handler = new Handler();
+            final long start = SystemClock.uptimeMillis();
+            final float startRotation = marker.getRotation();
+            final long duration = 1000;
+
+            final Interpolator interpolator = new LinearInterpolator();
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    isMarkerRotating = true;
+
+                    long elapsed = SystemClock.uptimeMillis() - start;
+                    float t = interpolator.getInterpolation((float) elapsed / duration);
+
+                    float rot = t * toRotation + (1 - t) * startRotation;
+
+                    marker.setRotation(-rot > 180 ? rot / 2 : rot);
+                    if (t < 1.0) {
+                        // Post again 16ms later.
+                        handler.postDelayed(this, 16);
+                    } else {
+                        isMarkerRotating = false;
+                    }
+                }
+            });
+        }
+    }
     String requestUrl;
 
     public void getReachingTime(double lati, double longi){
@@ -1354,9 +1417,9 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
 
-        RadioGroup radioGroup1 = (RadioGroup) dialogView.findViewById(R.id.radioGroup1);
-        Button bt_cancel_booking = (Button) dialogView.findViewById(R.id.bt_cancel_booking);
-        final EditText edt_reason = (EditText) dialogView.findViewById(R.id.edt_reason);
+        RadioGroup radioGroup1 =  dialogView.findViewById(R.id.radioGroup1);
+        Button bt_cancel_booking =  dialogView.findViewById(R.id.bt_cancel_booking);
+        final EditText edt_reason =  dialogView.findViewById(R.id.edt_reason);
         edt_reason.setVisibility(View.GONE);
 
 
@@ -1631,13 +1694,18 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
             Log.d(Constants.TAG, "Message = "+message);
             Log.d(Constants.TAG, "type = "+type);
 
+            if (type == 1){
+                // driver accept your booking ...
 
-            if (type == 2){
+                confirmBookingCity_taxi();
+
+            }else if (type == 2){
                 // start trip
 
                 finish();
 
             }else if (type == 3){
+
                 // end trip
 
                 showRatingDialog();
@@ -1649,40 +1717,7 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
 
             }else if (type == 5){
 
-                isCancelByDriver = true;
-
-                rl_in_2.startAnimation(hide_animation);
-                rl_in_2.setVisibility(View.GONE);
-
-                rl_in_1.startAnimation(show_animation);
-                rl_in_1.setVisibility(View.VISIBLE);
-
-                rl_cancel_booking.setVisibility(View.VISIBLE);
-
-
-
-                map.clear();
-                tv_reached_time.setVisibility(View.GONE);
-
-                if (timer2 != null)
-                timer2.cancel();
-
-                drawPolyline();
-
-
-                String msg = getResources().getString(R.string.msg_cancelDriver);
-                AlertDialog alertDialog =
-                        new AlertDialog.Builder(CitytaxiCabBooking.this).create();
-                alertDialog.setTitle("Gain Cabs");
-                alertDialog.setMessage(msg);
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-
+                isDriverCancel();
 
             }
 
@@ -1690,6 +1725,45 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
         }
 
     };
+
+
+    public void isDriverCancel(){
+
+        isCancelByDriver = true;
+
+        rl_in_2.startAnimation(hide_animation);
+        rl_in_2.setVisibility(View.GONE);
+
+        rl_in_1.startAnimation(show_animation);
+        rl_in_1.setVisibility(View.VISIBLE);
+
+        rl_cancel_booking.setVisibility(View.VISIBLE);
+
+
+
+        map.clear();
+        tv_reached_time.setVisibility(View.GONE);
+
+        if (timer2 != null)
+            timer2.cancel();
+
+        drawPolyline();
+
+
+        String msg = getResources().getString(R.string.msg_cancelDriver);
+        AlertDialog alertDialog =
+                new AlertDialog.Builder(CitytaxiCabBooking.this).create();
+        alertDialog.setTitle("UGO");
+        alertDialog.setMessage(msg);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+
+    }
 
     //////////////////////////////////////////////////////
     //// Check call permission ...
@@ -1775,7 +1849,7 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
                 .build()));
 
         MapUtils mapUtils = new MapUtils(CitytaxiCabBooking.this);
-        mapUtils.drawPolyline(map, false);
+        mapUtils.drawPolyline(map, true);
 
     }
 
@@ -1828,5 +1902,79 @@ public class CitytaxiCabBooking extends AppCompatActivity implements
             }
         });
     }
+    public void checkWallet(){
+
+        pDialog.show();
+
+        String url ="http://u-go.in/api/user_wallet";
+        AsyncHttpClient cl = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        params.put("id",  sharedPref.getUserId());
+        Log.d(TAG , "URL "+url);
+        Log.d(TAG , "params "+params.toString());
+
+
+        int DEFAULT_TIMEOUT = 30 * 1000;
+        cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
+        cl.post(url,params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d(TAG, "user_main_category_url- " + response.toString());
+                if (response != null) {
+                    Log.d(TAG, "user_main_category_url- " + response.toString());
+                    try {
+
+
+
+                        int status = response.getInt("status");
+                        String message = response.getString("message");
+
+                        if (status == 1) {
+
+                            pDialog.dismiss();
+                            String wallet_amount = response.getString("wallet_amount");
+                            float new_amt = Float.parseFloat(wallet_amount);
+
+                            if(new_amt>=totalWithGuideMax){
+                                progressDialog.show();
+                                callForBooking();
+                                Log.d(TAG, "callForbOOk: ");
+
+                            }
+                            else {
+                                Intent paymentScreen=new Intent(getApplicationContext(),PaymentMode.class);
+                                startActivity(paymentScreen);
+
+                            }
+
+                        } else{
+
+
+                            Toast.makeText(CitytaxiCabBooking.this, ""+message, Toast.LENGTH_LONG).show();
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.d(TAG, "responseString- " + responseString.toString());
+                Log.d("Failed: ", ""+statusCode);
+                Log.d("Error : ", "" + throwable);
+            }
+        });
+
+
+    }
+
 
 }

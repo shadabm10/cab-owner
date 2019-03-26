@@ -51,32 +51,47 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      // type 4 = reach near pickup location
      // type 5 = cancel by driver
 
-        try{
+        if (sharedPref.idFirstLogin()){
 
-            String title = remoteMessage.getData().get("title");
-            String body = remoteMessage.getData().get("body");
-            type = Integer.parseInt(remoteMessage.getData().get("type"));
+            try {
 
+                NotificationManager notificationManager =
+                        (NotificationManager) getApplicationContext()
+                                .getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancelAll();
 
-            if (applicationInForeground()) {
-
-                scheduleNotificationInForeground(title, body, type);
-
-            }else {
-                // on background ....
-                scheduleNotificationInBackground(title, body, type);
-
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
 
-            Log.d(TAG, "running activity = "+getForegroundActivity());
+            try{
+
+                String title = remoteMessage.getData().get("title");
+                String body = remoteMessage.getData().get("body");
+                type = Integer.parseInt(remoteMessage.getData().get("type"));
 
 
-        }catch (Exception e){
-            e.printStackTrace();
+                if (applicationInForeground()) {
+
+                    scheduleNotificationInForeground(title, body, type);
+
+                }else {
+                    // on background ....
+                    scheduleNotificationInBackground(title, body, type);
+
+                }
+
+
+                Log.d(TAG, "running activity = "+getForegroundActivity());
+
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
         }
-
-
 
 
     }
@@ -87,7 +102,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case 1:
                 sendNotification(title, body);
                 sharedPref.saveIsDriverAccept(true);
-
+                responseForConfirmBookingPage(getApplicationContext(), body, type);
 
                 break;
             case 2:
@@ -95,7 +110,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 setRideStartOrNot(true);
 
                 sharedPref.saveDriverIsReachingThePickupLocation(true);
-                driverReached(getApplicationContext(), body, type);
+                responseForConfirmBookingPage(getApplicationContext(), body, type);
 
 
                 break;
@@ -106,7 +121,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sharedPref.saveBookingId("");
                 sharedPref.saveDriverIsReachingThePickupLocation(false);
 
-                driverReached(getApplicationContext(), body, type);
+                responseForConfirmBookingPage(getApplicationContext(), body, type);
 
                 endTripResponce(getApplicationContext(), body, type);
 
@@ -114,7 +129,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case 4:
                 sendNotification(title, body);
 
-                driverReached(getApplicationContext(), body, type);
+                responseForConfirmBookingPage(getApplicationContext(), body, type);
 
                 break;
 
@@ -143,7 +158,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case 1:
                 sendNotification(title, body);
                 sharedPref.saveIsDriverAccept(true);
-
+                responseForConfirmBookingPage(getApplicationContext(), body, type);
 
                 break;
             case 2:
@@ -151,7 +166,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 setRideStartOrNot(true);
 
                 sharedPref.saveDriverIsReachingThePickupLocation(true);
-                driverReached(getApplicationContext(), body, type);
+                responseForConfirmBookingPage(getApplicationContext(), body, type);
 
 
                 break;
@@ -163,7 +178,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sharedPref.saveDriverIsReachingThePickupLocation(false);
                 sharedPref.setFreeForBooking(true);
 
-                driverReached(getApplicationContext(), body, type);
+                responseForConfirmBookingPage(getApplicationContext(), body, type);
 
                 endTripResponce(getApplicationContext(), body, type);
 
@@ -171,7 +186,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case 4:
                 sendNotification(title, body);
 
-                driverReached(getApplicationContext(), body, type);
+                responseForConfirmBookingPage(getApplicationContext(), body, type);
 
                 break;
 
@@ -216,7 +231,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
-            showNotification(getApplicationContext(), messageTitle, messageBody);
+            showNotificationForOreo(getApplicationContext(), messageTitle, messageBody);
 
         }else
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -236,7 +251,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
-    public void showNotification(Context context, String title, String body) {
+    public void showNotificationForOreo(Context context, String title, String body) {
 
         Intent intent = new Intent(this, Splash.class);
 
@@ -333,7 +348,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         context.sendBroadcast(intent);
     }*/
 
-    static void driverReached(Context context, String message, int type_) {
+    static void responseForConfirmBookingPage(Context context, String message, int type_) {
         Intent intent = new Intent(Constants.key_confirmbooking);
         //put whatever data you want to send, if any
         intent.putExtra("message", message);

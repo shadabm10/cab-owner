@@ -2,10 +2,12 @@ package com.project.sketch.ugo.screen;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -14,17 +16,36 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.project.sketch.ugo.R;
 import com.project.sketch.ugo.adapter.SlidingImage_Adapter;
+import com.project.sketch.ugo.httpRequest.ApiClient;
+import com.project.sketch.ugo.utils.Constants;
+import com.project.sketch.ugo.utils.GlobalClass;
 import com.project.sketch.ugo.utils.SharedPref;
 import com.rampo.updatechecker.UpdateChecker;
 import com.rampo.updatechecker.notice.Notice;
 import com.splunk.mint.Mint;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import org.json.JSONObject;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
 /**
  * Created by Developer on 1/8/18.
@@ -35,6 +56,7 @@ public class Splash extends AppCompatActivity {
     private static ViewPager mPager;
     CirclePageIndicator indicator;
     RelativeLayout rl_registration,rl_login;
+    ProgressDialog pDialog;
 
 
     private ArrayList<Integer> ImagesArray;
@@ -43,7 +65,7 @@ public class Splash extends AppCompatActivity {
 
     final Handler handler = new Handler();
     Timer swipeTimer = new Timer();
-
+    GlobalClass globalClass;
 
     private ArrayList<Integer> ImArray;
 
@@ -53,17 +75,15 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        globalClass=(GlobalClass)getApplicationContext();
         sharedPref = new SharedPref(this);
 
         Mint.initAndStartSession(this.getApplication(), "1cba8ec9");
 
-
-
         if (sharedPref.idFirstLogin()){
 
-            Intent intent = new Intent(Splash.this, LocationPermission.class);
-            startActivity(intent);
-            finish();
+            isLoginCheckApi();
 
         }else {
 
@@ -231,7 +251,7 @@ public class Splash extends AppCompatActivity {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    Log.d("RYD", "PERMISSION_GRANTED >>>>");
+                    Log.d("UGO", "PERMISSION_GRANTED >>>>");
 
 
                     UpdateChecker checker = new UpdateChecker(this);
@@ -244,6 +264,124 @@ public class Splash extends AppCompatActivity {
         }
     }
 
+    public SSLContext getSslContext() {
 
+        TrustManager[] byPassTrustManagers = new TrustManager[] { new X509TrustManager() {
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+            }
+        } };
+
+        SSLContext sslContext=null;
+
+        try {
+            sslContext = SSLContext.getInstance("TLS");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        try {
+            sslContext.init(null, byPassTrustManagers, new SecureRandom());
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+
+        return sslContext;
+    }
+
+
+    public void isLoginCheckApi(){
+
+        final String android_id = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+        pDialog.setMessage("Checking...");
+        pDialog.show();
+
+
+        String url = ApiClient.BASE_URL + Constants.check_login;
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        client.setSSLSocketFactory(
+                new SSLSocketFactory(getSslContext(),
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+
+        params.put(Constants.id, sharedPref.getUserId());
+
+        Log.d(Constants.TAG , "check_login - " + url);
+        Log.d(Constants.TAG , "check_login - " + params.toString());
+
+        int DEFAULT_TIMEOUT = 30 * 1000;
+        client.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
+        client.post(url, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d(Constants.TAG, "check_login- " + response.toString());
+
+                if (response != null) {
+                    try {
+
+                        int status = response.optInt("status");
+                        String message = response.optString("message");
+
+                        if (status == 1){
+
+                            JSONObject data = response.getJSONObject("data");
+
+                            String login_status = data.getString("login_status");
+                            String device_id = data.getString("device_id");
+
+                            if (login_status.equals("Yes") &&
+                                    android_id.equals(device_id)){
+
+
+                                Intent intent = new Intent(Splash.this,
+                                        LocationPermission.class);
+                                startActivity(intent);
+                                finish();
+
+                            }else {
+
+                                setContentView(R.layout.splash_screen);
+                                initViews();
+                                fa = Splash.this;
+                            }
+
+
+                        }else {
+
+                          //  Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                            setContentView(R.layout.splash_screen);
+                            initViews();
+                            fa = Splash.this;
+                        }
+
+                        pDialog.dismiss();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                pDialog.dismiss();
+            }
+
+        });
+
+
+    }
 
 }

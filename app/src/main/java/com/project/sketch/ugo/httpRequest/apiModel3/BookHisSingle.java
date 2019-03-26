@@ -84,6 +84,46 @@ public class BookHisSingle implements Serializable {
     private String guide;
 
 
+
+    @SerializedName("gst_amt")
+    private String gst_amt;
+
+
+    public String getWaiting_price() {
+        return waiting_price;
+    }
+
+    public void setWaiting_price(String waiting_price) {
+        this.waiting_price = waiting_price;
+    }
+
+    @SerializedName("waiting_price")
+    private String waiting_price;
+
+
+    public String getCommission_amt() {
+        return commission_amt;
+    }
+
+    public void setCommission_amt(String commission_amt) {
+        this.commission_amt = commission_amt;
+    }
+
+    @SerializedName("commission_amt")
+    private String commission_amt;
+
+    public String getSub_total_amt() {
+        return sub_total_amt;
+    }
+
+    public void setSub_total_amt(String sub_total_amt) {
+        this.sub_total_amt = sub_total_amt;
+    }
+
+    @SerializedName("sub_total_amt")
+    private String sub_total_amt;
+
+
     @SerializedName("coupon_applied")
     private String coupon_applied;
 
@@ -126,7 +166,13 @@ public class BookHisSingle implements Serializable {
 
 
 
+    public String getGst_amt() {
+        return gst_amt;
+    }
 
+    public void setGst_amt(String gst_amt) {
+        this.gst_amt = gst_amt;
+    }
     public String getId() {
         return id;
     }

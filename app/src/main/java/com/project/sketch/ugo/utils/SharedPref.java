@@ -33,6 +33,19 @@ public class SharedPref {
     private static final String key_FirstLogin = "First_Login";
     private static final String Paymentmode = "Paymentmode";
 
+
+
+
+    private static final String Key_device_type = "device_type";
+
+
+    private static final String Key_fcm_reg_token = "fcm_reg_token";
+
+
+
+    private static final String Key_deviceid = "login_status";
+    private static final String Key_login_status = "login_status";
+
     private static final String RideComplete = "RideComplete";
     private static final String missedcall_number = "missedcall_number";
     private static final String is_riding = "is_riding";
@@ -56,8 +69,15 @@ public class SharedPref {
 
     }
 
-
-
+    public static String getKey_device_type() {
+        return Key_device_type;
+    }
+    public static String getKey_fcm_reg_token() {
+        return Key_fcm_reg_token;
+    }
+    public static String getKey_deviceid() {
+        return Key_deviceid;
+    }
     public void setFirstLogin(boolean boo){
         editor.putBoolean(key_FirstLogin, boo);
         editor.commit();
@@ -80,16 +100,25 @@ public class SharedPref {
     }
 
 
-    public void setUserInfo(String name, String email, String phone, String image,String rating){
+    public void setUserInfo(String name, String email, String phone,
+                            String image,String rating,String login_status,
+                            String fcm_reg_token,String deviceid,String device_type){
         editor.putString(key_name, name);
         editor.putString(key_email, email);
         editor.putString(key_phone, phone);
         editor.putString(key_iamge, image);
         editor.putString(key_customer_rating,rating);
+        editor.putString(Key_login_status,login_status);
+        editor.putString(Key_fcm_reg_token,fcm_reg_token);
+        editor.putString(Key_deviceid,deviceid);
+        editor.putString(Key_device_type,device_type);
         editor.commit();
 
     }
+    public  String getKey_login_status() {
+        return   pref.getString(Key_login_status, "");
 
+    }
     public String getUserName(){
         return pref.getString(key_name, "");
     }
@@ -119,7 +148,7 @@ public class SharedPref {
 
 
     public String getPaymentMode(){
-       return pref.getString(Paymentmode, Constants.paymentMode_cash);
+       return pref.getString(Paymentmode, Constants.paymentMode_Wallet);
     }
 
 

@@ -646,10 +646,8 @@ public class RentalCabBooking extends AppCompatActivity {
 
                 if (sharedPref.getPaymentMode().matches(Constants.paymentMode_cash)){
                     tv_paymentMode.setText("Cash");
-                }else if (sharedPref.getPaymentMode().matches(Constants.paymentMode_paytm)){
-                    tv_paymentMode.setText("Paytm");
-                }else if (sharedPref.getPaymentMode().matches(Constants.paymentMode_jiomoney)){
-                    tv_paymentMode.setText("Jio Money");
+                }else if (sharedPref.getPaymentMode().matches(Constants.paymentMode_Wallet)){
+                    tv_paymentMode.setText("Wallet");
                 }
 
             }

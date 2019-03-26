@@ -194,12 +194,9 @@ public class EditProfile extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do do my action here
-                        sharedPref.resetData();
-                        Intent intent = new Intent(EditProfile.this, Splash.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
 
-                        finish();
+                        logoutApi();
+
                         dialog.dismiss();
                     }
 
@@ -521,7 +518,12 @@ public class EditProfile extends AppCompatActivity {
                                     customer_info.getString("email"),
                                     customer_info.getString("phone"),
                                     customer_info.getString("image"),
-                                    customer_info.getString("customer_rating")
+                                    customer_info.getString("customer_rating"),
+                                    customer_info.getString("login_status"),
+                                    customer_info.getString("fcm_reg_token"),
+                                    customer_info.getString("deviceid"),
+                                    customer_info.getString("device_type")
+
                             );
 
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -584,5 +586,75 @@ public class EditProfile extends AppCompatActivity {
         return sslContext;
     }
 
+
+    public void logoutApi(){
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+
+
+        String url = ApiClient.BASE_URL + Constants.logout;
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        client.setSSLSocketFactory(
+                new SSLSocketFactory(getSslContext(),
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+
+        params.put(Constants.id, sharedPref.getUserId());
+
+        Log.d(Constants.TAG , "logout - " + url);
+        Log.d(Constants.TAG , "logout - " + params.toString());
+
+        int DEFAULT_TIMEOUT = 30 * 1000;
+        client.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
+        client.post(url, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d(Constants.TAG, "logout- " + response.toString());
+
+                if (response != null) {
+                    try {
+
+                        int status = response.optInt("status");
+                        String message = response.optString("message");
+
+                        if (status == 1){
+
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                            sharedPref.resetData();
+                            Intent intent = new Intent(EditProfile.this, Splash.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+
+                            finish();
+
+                        }else {
+
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                        }
+
+                        pDialog.dismiss();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                pDialog.dismiss();
+            }
+
+        });
+
+
+    }
 
 }

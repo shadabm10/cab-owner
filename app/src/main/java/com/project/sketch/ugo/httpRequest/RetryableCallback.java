@@ -10,9 +10,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by pallavahooja on 16/05/16.
- */
+
 
 public abstract class RetryableCallback<T> implements Callback<T> {
 

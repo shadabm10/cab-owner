@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,6 +71,7 @@ import com.project.sketch.ugo.screen.LocationSearch;
 import com.project.sketch.ugo.screen.OutstationCabBooking;
 import com.project.sketch.ugo.screen.RentalCabBooking;
 import com.project.sketch.ugo.screen.SpecialFareDialog;
+import com.project.sketch.ugo.utils.Constants;
 import com.project.sketch.ugo.utils.GPSTracker;
 import com.project.sketch.ugo.utils.GlobalClass;
 import com.project.sketch.ugo.utils.LocationAddress;
@@ -176,10 +178,8 @@ public class BookYourRide extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.frag_bookyourride, container, false);
-
+     //
         InitViews(rootView);
-
-        buttonOnClick();
 
         UpdateChecker checker = new UpdateChecker(getActivity());
         checker.setNotice(Notice.NOTIFICATION);
@@ -194,121 +194,139 @@ public class BookYourRide extends Fragment implements
         globalClass = (GlobalClass)getActivity().getApplicationContext();
         sharedPref = new SharedPref(getActivity());
 
-        globalClass.PICUP_ADDRESS = "";
-        globalClass.DROP_ADDRESS = "";
-        sharedPref.setFreeForBooking(false);
+       /* if (globalClass.getDriver().getBooking_status().equals("accepted")){
 
-        mapFrag = (SupportMapFragment)this.getChildFragmentManager().findFragmentById(R.id.map);
-        mapFrag.getMapAsync(this);
+            Intent intent = new Intent(getActivity(), CitytaxiCabBooking.class);
+            intent.putExtra("key", "ongoing");
+            startActivity(intent);
+
+        }else {*/
+
+            globalClass.PICUP_ADDRESS = "";
+            globalClass.DROP_ADDRESS = "";
+            globalClass.KEY_of_travel = Constants.key_pickup;
+            sharedPref.setFreeForBooking(false);
+
+            mapFrag = (SupportMapFragment)this.getChildFragmentManager().findFragmentById(R.id.map);
+            mapFrag.getMapAsync(this);
 
 
-        //Initializing google api client
-        googleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+            //Initializing google api client
+            googleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getActivity(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(getActivity(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+
+                }
+            }
+            else {
 
             }
-        }
-        else {
 
-        }
+            geoCoder = new Geocoder(getActivity(), Locale.getDefault());
+            lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0.1f , this);
 
-        geoCoder = new Geocoder(getActivity(), Locale.getDefault());
-        lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0.1f , this);
-
-        //((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-
-        tv_pickup_address = view.findViewById(R.id.tv_pickup_address);
-        tv_pickup_address.setText("Getting Address...\n");
-        tv_drop_address = view.findViewById(R.id.tv_drop_address);
-        tv_drop_address.setText("Select Drop Address\n");
-
-        ll_bottom = view.findViewById(R.id.ll_bottom);
-        ll_bottom.setVisibility(View.GONE);
-        rl_loader = view.findViewById(R.id.rl_loader);
-        rl_loader.setVisibility(View.VISIBLE);
-
-        rl_ride_later = view.findViewById(R.id.rl_ride_later);
-        rl_ride_now = view.findViewById(R.id.rl_ride_now);
-        rl_continue = view.findViewById(R.id.rl_continue);
+            //((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
 
-        rl_pickup = (RelativeLayout)view.findViewById(R.id.rl_pickup);
-        rl_drop = (RelativeLayout)view.findViewById(R.id.rl_drop);
-        rl_radio = (RelativeLayout)view.findViewById(R.id.rl_radio);
-        rl_radio.setVisibility(View.GONE);
-        //rl_radio.getBackground().setAlpha(160);
+            tv_pickup_address = view.findViewById(R.id.tv_pickup_address);
+            tv_pickup_address.setText("Getting Address...\n");
+            tv_drop_address = view.findViewById(R.id.tv_drop_address);
 
-        rl_2_button = (RelativeLayout) view.findViewById(R.id.rl_2_button);
-        rl_2_button.setVisibility(View.VISIBLE);
-        rl_1_button = (RelativeLayout) view.findViewById(R.id.rl_1_button);
-        rl_1_button.setVisibility(View.GONE);
+            tv_drop_address.setText("Select Drop Address\n");
 
-        //rl_pickup.getBackground().setAlpha(150);
-        //rl_drop.getBackground().setAlpha(150);
+            ll_bottom = view.findViewById(R.id.ll_bottom);
+            ll_bottom.setVisibility(View.GONE);
+            rl_loader = view.findViewById(R.id.rl_loader);
+            rl_loader.setVisibility(View.VISIBLE);
 
-        //rl_drop.setVisibility(View.GONE);
+            rl_ride_later = view.findViewById(R.id.rl_ride_later);
+            rl_ride_now = view.findViewById(R.id.rl_ride_now);
+            rl_continue = view.findViewById(R.id.rl_continue);
 
-        image_mylocation = (ImageView)view.findViewById(R.id.image_mylocation);
-        image_mylocation.setVisibility(View.GONE);
 
-        image_cross = (ImageView)view.findViewById(R.id.image_cross);
-        image_pin = (ImageView)view.findViewById(R.id.image_pin);
-        image_fav1 = (ImageView)view.findViewById(R.id.image_fav1);
-        image_fav2 = (ImageView)view.findViewById(R.id.image_fav2);
+            rl_pickup = (RelativeLayout)view.findViewById(R.id.rl_pickup);
+            rl_drop = (RelativeLayout)view.findViewById(R.id.rl_drop);
+            rl_radio = (RelativeLayout)view.findViewById(R.id.rl_radio);
+            rl_radio.setVisibility(View.GONE);
+            //rl_radio.getBackground().setAlpha(160);
 
-        image_search1 = (ImageView)view.findViewById(R.id.image_search1);
-        image_search2 = (ImageView)view.findViewById(R.id.image_search2);
+            rl_2_button = (RelativeLayout) view.findViewById(R.id.rl_2_button);
+            rl_2_button.setVisibility(View.VISIBLE);
+            rl_1_button = (RelativeLayout) view.findViewById(R.id.rl_1_button);
+            rl_1_button.setVisibility(View.GONE);
 
-        image_cross.setVisibility(View.GONE);
+            //rl_pickup.getBackground().setAlpha(150);
+            //rl_drop.getBackground().setAlpha(150);
 
-        inflater = getActivity().getLayoutInflater();
-        //innerlayout = (LinearLayout)view.findViewById(R.id.innerLay);
+            //rl_drop.setVisibility(View.GONE);
 
-        recyclerview_cab = (RecyclerView) view.findViewById(R.id.recyclerview_cab);
+            image_mylocation = (ImageView)view.findViewById(R.id.image_mylocation);
+            image_mylocation.setVisibility(View.GONE);
 
-        radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
-        radio_city = (RadioButton) view.findViewById(R.id.radio_city);
-        radio_outstation = (RadioButton) view.findViewById(R.id.radio_outstation);
-        radio_rental = (RadioButton) view.findViewById(R.id.radio_rental);
-        radio_special_fare = (RadioButton) view.findViewById(R.id.radio_special_fare);
+            image_cross = (ImageView)view.findViewById(R.id.image_cross);
+            image_pin = (ImageView)view.findViewById(R.id.image_pin);
+            image_fav1 = (ImageView)view.findViewById(R.id.image_fav1);
+            image_fav2 = (ImageView)view.findViewById(R.id.image_fav2);
+
+            image_search1 = (ImageView)view.findViewById(R.id.image_search1);
+            image_search2 = (ImageView)view.findViewById(R.id.image_search2);
+
+            image_cross.setVisibility(View.GONE);
+
+            inflater = getActivity().getLayoutInflater();
+            //innerlayout = (LinearLayout)view.findViewById(R.id.innerLay);
+
+            recyclerview_cab = (RecyclerView) view.findViewById(R.id.recyclerview_cab);
+
+            radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+            radio_city = (RadioButton) view.findViewById(R.id.radio_city);
+            radio_outstation = (RadioButton) view.findViewById(R.id.radio_outstation);
+            radio_rental = (RadioButton) view.findViewById(R.id.radio_rental);
+            radio_special_fare = (RadioButton) view.findViewById(R.id.radio_special_fare);
 
 
 
-        isSelectPickup = true;
-        isSelectDrop = false;
-        isPickupFill = true;
-        isDropFill = false;
+            isSelectPickup = true;
+            isSelectDrop = false;
+            isPickupFill = true;
+            isDropFill = false;
 
-        booking_type = getActivity().getResources().getString(R.string.CityTaxi);
-
-
-
-        show_animation = AnimationUtils.loadAnimation(getActivity(), R.anim.in_animation);
-        hide_animation = AnimationUtils.loadAnimation(getActivity(), R.anim.out_animation);
-
-        slideUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_up_animation);
-        slideDownAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation);
-
-        slide_righttoleft = AnimationUtils.loadAnimation(getActivity(), R.anim.right_to_left_anim);
-        slide_lefttoright = AnimationUtils.loadAnimation(getActivity(), R.anim.left_to_right_anim);
-
-        zoom_in = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in);
-        zoom_out = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_out);
-
-        specialFareDialog = new SpecialFareDialog(getActivity());
+            booking_type = getActivity().getResources().getString(R.string.CityTaxi);
 
 
-        createLocationRequest();
+
+            show_animation = AnimationUtils.loadAnimation(getActivity(), R.anim.in_animation);
+            hide_animation = AnimationUtils.loadAnimation(getActivity(), R.anim.out_animation);
+
+            slideUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_up_animation);
+            slideDownAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation);
+
+            slide_righttoleft = AnimationUtils.loadAnimation(getActivity(), R.anim.right_to_left_anim);
+            slide_lefttoright = AnimationUtils.loadAnimation(getActivity(), R.anim.left_to_right_anim);
+
+            zoom_in = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in);
+            zoom_out = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_out);
+
+            specialFareDialog = new SpecialFareDialog(getActivity());
+
+
+            createLocationRequest();
+
+
+
+            buttonOnClick();
+
+      //  }
+
 
     }
 
@@ -319,7 +337,7 @@ public class BookYourRide extends Fragment implements
             @Override
             public void onClick(View v) {
 
-                globalClass.KEY_of_travel = "pickup";
+                globalClass.KEY_of_travel = Constants.key_pickup;
                 Intent intent = new Intent(getActivity(), LocationSearch.class);
                 intent.putExtra("key", "pickup");
                 startActivityForResult(intent, REQUEST_CODE_SEARCH_LOCATION);
@@ -333,7 +351,7 @@ public class BookYourRide extends Fragment implements
             @Override
             public void onClick(View v) {
 
-                globalClass.KEY_of_travel = "drop";
+                globalClass.KEY_of_travel = Constants.key_drop;
                 Intent intent = new Intent(getActivity(), LocationSearch.class);
                 intent.putExtra("key", "drop");
                 startActivityForResult(intent, REQUEST_CODE_SEARCH_LOCATION);
@@ -381,7 +399,7 @@ public class BookYourRide extends Fragment implements
 
                 }else {
 
-                    globalClass.KEY_of_travel = "drop";
+                    globalClass.KEY_of_travel = Constants.key_drop;
                     Intent intent = new Intent(getActivity(), LocationSearch.class);
                     intent.putExtra("key", "drop");
                     startActivityForResult(intent, REQUEST_CODE_SEARCH_LOCATION);
@@ -647,11 +665,11 @@ public class BookYourRide extends Fragment implements
 
         is_camera_move = false;
 
-        if (globalClass.KEY_of_travel.equals("drop")){
+        if (globalClass.KEY_of_travel.equals(Constants.key_drop)){
 
          //   image_pin.setImageResource(R.mipmap.pin_center_red);
         }else
-        if (globalClass.KEY_of_travel.equals("pickup")){
+        if (globalClass.KEY_of_travel.equals(Constants.key_pickup)){
 
          //   image_pin.setImageResource(R.mipmap.pin_centre_green);
         }
@@ -1309,8 +1327,8 @@ public class BookYourRide extends Fragment implements
     private Timer timer;
     private void callTread(){
 
-        int delay = 5000; // delay for 1 sec.
-        int period = 20 * 1000; // repeat every 10 sec.
+        int delay = 1000; // delay for 1 sec.
+        int period = 10 * 1000; // repeat every 10 sec.
 
         if (timer == null){
 
@@ -1477,7 +1495,7 @@ public class BookYourRide extends Fragment implements
     private void setDriverInMap(List<Driver> driverList, String cab_marker){
 
         map.clear();
-        LatLng point;
+
         for (int i = 0; i < driverList.size(); i++){
 
             double lati = Double.parseDouble(driverList.get(i).getLat());
@@ -1485,41 +1503,101 @@ public class BookYourRide extends Fragment implements
 
            // createMarker(lati, longi);
           //  Log.d(TAG, "setDriverInMap: "+image);
-            point = new LatLng(lati, longi);
-            drawMarker(point, cab_marker);
+            LatLng point = new LatLng(lati, longi);
+          //  drawMarker(point, cab_marker);
+
+            JSONObject object = new JSONObject();
+
+            try {
+
+                object.put("url", cab_marker);
+                object.put("lat", driverList.get(i).getLat());
+                object.put("lng", driverList.get(i).getLng());
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            new DrawMarkerAsync().execute(object.toString());
+
         }
 
     }
 
-    private void drawMarker(LatLng point, String cab_marker)  {
-        URL url = null;
-        try {
-            url = new URL(cab_marker);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+
+    private class DrawMarkerAsync extends AsyncTask<String, Void, String> {
+        BitmapDescriptor icon;
+        String url_image;
+        double lati;
+        double longi;
+
+        @Override
+        protected void onPreExecute() {
         }
-        try {
-            Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-           Bitmap resized = Bitmap.createScaledBitmap(image,(int)(image.getWidth()*0.8), (int)(image.getHeight()*0.8), true);
-           globalClass.cab_image=resized;
-          //  Bitmap dest = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
-            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resized);
-            //  Bitmap bm = BitmapFactory.decodeFile(cab_marker);
-            Log.e(TAG, "drawMarker: "+icon );
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                JSONObject object = new JSONObject(params[0]);
+
+                url_image = object.getString("url");
+                lati = object.getDouble("lat");
+                longi = object.getDouble("lng");
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            URL url = null;
+            try {
+                url = new URL(url_image);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            try {
+                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                if (image.equals("")) {
+                    Toast.makeText(getActivity(), "no cab found", Toast.LENGTH_SHORT).show();
+                } else {
+                    Bitmap resized = Bitmap.createScaledBitmap(image, (int) (image.getWidth() * 0.8), (int) (image.getHeight() * 0.8), true);
+                    globalClass.cab_image = resized;
+                    //  Bitmap dest = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+                    icon = BitmapDescriptorFactory.fromBitmap(resized);
+                    //  Bitmap bm = BitmapFactory.decodeFile(cab_marker);
+
+                }
+            } catch(IOException e){
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Image not found", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            // Bitmap bmp = BitmapFactory.decodeStream(cab_marker.openConnection().getInputStream());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            LatLng point = new LatLng(lati, longi);
+            Log.e(TAG, "drawMarker: " + icon);
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(point);
             markerOptions.anchor(0.5f, 0.5f);
             markerOptions.icon(icon);
 
             map.addMarker(markerOptions);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
-        // Bitmap bmp = BitmapFactory.decodeStream(cab_marker.openConnection().getInputStream());
 
 
     }
+
+    private void drawMarker(LatLng point, String cab_marker) {
+
+
+        }
 
 
     private void setDataOfCabs(final List<Cab> cabList){
@@ -1533,6 +1611,7 @@ public class BookYourRide extends Fragment implements
             cabVariant = new CabVariant();
             cabVariant.setCab_name(cabList.get(i).getCab_name());
             cabVariant.setCab_id(cabList.get(i).getCab_id());
+                Log.d(TAG, "cab id"+cabList.get(i).getCab_id());
             cabVariant.setSelectImage(cabList.get(i).getSelect_image());
             cabVariant.setUnselectImage(cabList.get(i).getUnselect_image());
             cabVariant.setNoOfcab(cabList.get(i).getDriver_Array().size());
@@ -1706,14 +1785,14 @@ public class BookYourRide extends Fragment implements
                         int value = distance.optInt("value");
                         root_distance = value;
 
-                        if (status.matches("ZERO_RESULTS")){
+                        if (status.equalsIgnoreCase("ZERO_RESULTS")){
 
                             LocationAddress locationAddress = new LocationAddress();
                             locationAddress.getAddressFromLocation(mPosition.latitude, mPosition.longitude,
                                     getActivity(), new GeocoderHandler());
 
 
-                        }else if (status.matches("OK")){
+                        }else if (status.equalsIgnoreCase("OK")){
 
                             /*LocationAddress locationAddress = new LocationAddress();
                             locationAddress.getAddressFromLocation(mPosition.latitude, mPosition.longitude,
@@ -1730,10 +1809,10 @@ public class BookYourRide extends Fragment implements
                             String string_drop = destination_addresses.getString(0);
 
 
-                            if (globalClass.KEY_of_travel.equals("pickup")){
+                            if (isSelectPickup){
                                 globalClass.PICUP_ADDRESS = string_pick;
                                 tv_pickup_address.setText("Pick Address:\n"+string_pick);
-                            }else if (globalClass.KEY_of_travel.equals("drop")){
+                            }else if (isSelectDrop){
                                 globalClass.DROP_ADDRESS = string_drop;
                                 tv_drop_address.setText("Drop Address:\n"+string_drop);
                             }

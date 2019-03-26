@@ -16,6 +16,8 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -25,6 +27,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -44,6 +49,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.sketch.ugo.R;
 import com.project.sketch.ugo.httpRequest.ApiClient;
@@ -54,8 +60,10 @@ import com.project.sketch.ugo.httpRequest.apiModel4.CancelBooking;
 import com.project.sketch.ugo.httpRequest.apiModel4.FeedbackRatingResponse;
 import com.project.sketch.ugo.httpRequest.apiModel8.FareDetails;
 import com.project.sketch.ugo.httpRequest.apiModel8.FareInfo;
+import com.project.sketch.ugo.screen.CitytaxiCabBooking;
 import com.project.sketch.ugo.utils.Constants;
 import com.project.sketch.ugo.utils.GlobalClass;
+import com.project.sketch.ugo.utils.MapUtils;
 import com.project.sketch.ugo.utils.SharedPref;
 import com.project.sketch.ugo.utils.ValidationClass;
 
@@ -76,20 +84,23 @@ public class TrackYourRide extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-
+    float waiting_fee ;
+    float start_rotation;
+    String TAG="Rating";
     private GoogleApiClient googleApiClient;
     private GoogleMap map = null;
-
+    float toRotation;
     SupportMapFragment mapFrag;
     LocationManager lm;
     Geocoder geoCoder;
-
+    double grand_total;
     TextView tv_pickup_address, tv_drop_address;
     Button btn_help;
 
     SharedPref  sharedPref;
     GlobalClass globalClass;
-
+    Marker m1;
+    boolean isMarkerRotating=false;
     public FragmentTransaction ft;
 
     boolean click_pay_paytm = false;
@@ -260,6 +271,7 @@ public class TrackYourRide extends Fragment implements
                 public void run()
                 {
                     getDriverLocation();
+
                 }
             }, delay, period);
         }
@@ -268,10 +280,84 @@ public class TrackYourRide extends Fragment implements
 
     @Override
     public void onLocationChanged(Location location) {
-
+      //  moveVechile(m1, location);
+      //  Log.d(TAG, "onLocationChanged: "+location);
+       // Log.d(TAG, "onLocationChanged: "+m1);
+       // rotateMarker(m1, location.getBearing(), start_rotation);
 
     }
 
+    public void rotateMarker(final Marker marker, final float toRotation, final float st) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        final float startRotation = st;
+        final long duration = 1555;
+
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed / duration);
+
+                float rot = t * toRotation + (1 - t) * startRotation;
+
+
+                marker.setRotation(-rot > 180 ? rot / 2 : rot);
+                start_rotation = -rot > 180 ? rot / 2 : rot;
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
+    }
+    public void moveVechile(final Marker myMarker, final Location finalPosition) {
+
+        final LatLng startPosition = myMarker.getPosition();
+        Log.d(TAG, "moveVechile: "+myMarker);
+        Log.d(TAG, "moveVechile: "+finalPosition);
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        final Interpolator interpolator = new AccelerateDecelerateInterpolator();
+        final float durationInMs = 3000;
+        final boolean hideMarker = false;
+
+        handler.post(new Runnable() {
+            long elapsed;
+            float t;
+            float v;
+
+            @Override
+            public void run() {
+                // Calculate progress using interpolator
+                elapsed = SystemClock.uptimeMillis() - start;
+                t = elapsed / durationInMs;
+                v = interpolator.getInterpolation(t);
+
+                LatLng currentPosition = new LatLng(
+                        startPosition.latitude * (1 - t) + (finalPosition.getLatitude()) * t,
+                        startPosition.longitude * (1 - t) + (finalPosition.getLongitude()) * t);
+                myMarker.setPosition(currentPosition);
+                // myMarker.setRotation(finalPosition.getBearing());
+
+
+                // Repeat till progress is completeelse
+                if (t < 1) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                    // handler.postDelayed(this, 100);
+                } else {
+                    if (hideMarker) {
+                        myMarker.setVisible(false);
+                    } else {
+                        myMarker.setVisible(true);
+                    }
+                }
+            }
+        });
+    }
     @Override
     public void onProviderDisabled(String arg0) {
         // TODO Auto-generated method stub
@@ -348,7 +434,7 @@ public class TrackYourRide extends Fragment implements
                                 driverLoc1 = driverLoc2;
                                 driverLoc2 = new LatLng(lati, longi);
                             }
-
+                           // moveVechile(m1, driverLoc2);
                             //drawMarker(driverLoc1);
 
                             // animateMarker(driverLoc1, driverLoc2, false);
@@ -358,22 +444,34 @@ public class TrackYourRide extends Fragment implements
                             driverLoc2.latitude, driverLoc2.longitude, true);*/
 
                             float zoom = 16f;
-                            LatLng target = new LatLng(lati, longi);
+                            LatLng target = globalClass.PICKUP_LATLNG;
 
-                            map.clear();
+                           // map.clear();
 
                             MarkerOptions markerOptions1 = new MarkerOptions();
                             markerOptions1.position(target);
                             markerOptions1.title("Driver Location");
                             markerOptions1.icon(BitmapDescriptorFactory.fromBitmap(globalClass.cab_image));
                             map.addMarker(markerOptions1);
+                            map.moveCamera(CameraUpdateFactory.newLatLng(target));
+                            map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                                    .target(map.getCameraPosition().target)
+                                    .zoom(16)
+                                    .bearing(30)
+                                    .tilt(45)
+                                    .build()));
 
-                            CameraPosition position = new CameraPosition.Builder().target(target).zoom(zoom).build();
-                            map.animateCamera(CameraUpdateFactory.newCameraPosition(position));
+                            MapUtils mapUtils = new MapUtils(getActivity());
+                            mapUtils.drawPolyline(map, true);
+
+                            bearingBetweenLocations(driverLoc1,driverLoc2);
+                            toRotation = (float) bearingBetweenLocations(driverLoc1, driverLoc2);
+                            Log.d("TAG", "onResponse: " +toRotation);
+                            rotateMarker(m1, toRotation);
 
 
-
-                        }else if (response.body().getStatus() == 2){
+                        }
+                        else if (response.body().getStatus() == 2){
 
 
 
@@ -405,6 +503,57 @@ public class TrackYourRide extends Fragment implements
 
 
     }
+    private double bearingBetweenLocations(LatLng latLng1,LatLng latLng2) {
+
+        double PI = 3.14159;
+        double lat1 = latLng1.latitude * PI / 180;
+        double long1 = latLng1.longitude * PI / 180;
+        double lat2 = latLng2.latitude * PI / 180;
+        double long2 = latLng2.longitude * PI / 180;
+
+        double dLon = (long2 - long1);
+
+        double y = Math.sin(dLon) * Math.cos(lat2);
+        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
+                * Math.cos(lat2) * Math.cos(dLon);
+
+        double brng = Math.atan2(y, x);
+
+        brng = Math.toDegrees(brng);
+        brng = (brng + 360) % 360;
+
+        return brng;
+    }
+    private void rotateMarker(final Marker marker, final float toRotation) {
+        if(!isMarkerRotating) {
+            final Handler handler = new Handler();
+            final long start = SystemClock.uptimeMillis();
+            final float startRotation = marker.getRotation();
+            final long duration = 1000;
+
+            final Interpolator interpolator = new LinearInterpolator();
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    isMarkerRotating = true;
+
+                    long elapsed = SystemClock.uptimeMillis() - start;
+                    float t = interpolator.getInterpolation((float) elapsed / duration);
+
+                    float rot = t * toRotation + (1 - t) * startRotation;
+
+                    marker.setRotation(-rot > 180 ? rot / 2 : rot);
+                    if (t < 1.0) {
+                        // Post again 16ms later.
+                        handler.postDelayed(this, 16);
+                    } else {
+                        isMarkerRotating = false;
+                    }
+                }
+            });
+        }
+    }
 
     //////////////////////////////////////////////////
     ///////////////
@@ -435,6 +584,22 @@ public class TrackYourRide extends Fragment implements
     public void showRatingDialog(FareInfo fareInfo){
         rating_ = 0;
 
+        Log.d(Constants.TAG, "Fare Info: "+fareInfo.getGst_rate());
+        double total_fare=fareInfo.getTotal_fare();
+        double gst=fareInfo.getGst_fair();
+        double coupon=fareInfo.getCoupon_amount();
+        double subtotal=fareInfo.getSub_total_fare();
+        double commission=fareInfo.getCommission_fair();
+        grand_total = subtotal + commission;
+
+        String stringdouble= Double.toString(total_fare);
+        String stringgstfair= Double.toString(gst);
+        String subtotal1= Double.toString(grand_total);
+        String coupon1= Double.toString(coupon);
+
+        Log.d(TAG, "coupon1: "+coupon1);
+
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         dialogBuilder.setCancelable(false);
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -452,14 +617,14 @@ public class TrackYourRide extends Fragment implements
         }
 
 
-        RatingBar rating_driver = (RatingBar) dialogView.findViewById(R.id.rating_driver);
+        RatingBar rating_driver =  dialogView.findViewById(R.id.rating_driver);
         stars = (LayerDrawable) rating_driver.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.parseColor("#FFA100"), PorterDuff.Mode.SRC_ATOP); // for filled stars
         stars.getDrawable(1).setColorFilter(Color.parseColor("#989898"), PorterDuff.Mode.SRC_ATOP); // for half filled stars
         stars.getDrawable(0).setColorFilter(Color.parseColor("#989898"), PorterDuff.Mode.SRC_ATOP); // for empty stars
 
-        final EditText edt_comment = (EditText) dialogView.findViewById(R.id.edt_comment);
-        Button btn_submit = (Button) dialogView.findViewById(R.id.btn_submit);
+        final EditText edt_comment =  dialogView.findViewById(R.id.edt_comment);
+        Button btn_submit =  dialogView.findViewById(R.id.btn_submit);
 
         rating_driver.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -478,45 +643,23 @@ public class TrackYourRide extends Fragment implements
         });
 
 
-        /////// Fare
-        DecimalFormat precision = new DecimalFormat("0.00");
 
-        RelativeLayout relative_guider_fee
-                = (RelativeLayout) dialogView.findViewById(R.id.relative_guider_fee);
-        TextView tv_fare = (TextView) dialogView.findViewById(R.id.tv_fare);
-        TextView tv_taxAmount = (TextView) dialogView.findViewById(R.id.tv_taxAmount);
-        TextView tv_guideFee = (TextView) dialogView.findViewById(R.id.tv_guideFee);
-        TextView tv_totalFare = (TextView) dialogView.findViewById(R.id.tv_totalFare);
+        TextView tv_fare =  dialogView.findViewById(R.id.tv_fare);
+        TextView tv_taxAmount =  dialogView.findViewById(R.id.tv_taxAmount);
+      //  TextView tv_guideFee = dialogView.findViewById(R.id.tv_guideFee);
+        TextView tv_totalFare =  dialogView.findViewById(R.id.tv_totalFare);
+        TextView coupon_text =  dialogView.findViewById(R.id.tv_coupon);
+        TextView tv_waitFee = dialogView.findViewById(R.id.tv_waitFee);
 
-        if (fareInfo.getGuide_charges() == 0){
-            relative_guider_fee.setVisibility(View.GONE);
-        }
-        tv_guideFee.setText(precision.format(fareInfo.getGuide_charges()));
-
-
-        tv_totalFare.setText(
-                precision.format(
-                        Math.round(fareInfo.getTotal_fare() + fareInfo.getGuide_charges())));
+        tv_totalFare.setText(stringdouble);
+        tv_taxAmount.setText(stringgstfair);
+        tv_waitFee.setText(fareInfo.getWaiting_fair());
+        tv_fare.setText(subtotal1);
+        coupon_text.setText(coupon1);
+        Log.d(TAG, "waiting_fee: "+waiting_fee);
 
 
-        double baseFare = 0;
-        if (fareInfo.getCommission_rate_type().matches("percent")){
 
-            baseFare = fareInfo.getTotal_fare() /
-                    (1 + fareInfo.getGst_rate() + fareInfo.getCommission_rate());
-
-        }else {
-
-            baseFare = (fareInfo.getTotal_fare()
-                    +  (fareInfo.getCommission_rate() * (1 + fareInfo.getGst_rate())))
-                    /
-                    (1 + fareInfo.getGst_rate());
-
-        }
-
-
-        tv_fare.setText(precision.format(baseFare));
-        tv_taxAmount.setText(precision.format(baseFare * fareInfo.getGst_rate()));
 
 
     }
@@ -557,9 +700,9 @@ public class TrackYourRide extends Fragment implements
 
                             sharedPref.setFreeForBooking(true);
 
-                            if (sharedPref.getPaymentMode().matches(Constants.paymentMode_paytm)){
+                            if (sharedPref.getPaymentMode().matches(Constants.paymentMode_Wallet)){
 
-                                showPaytmPayDialog();
+                             //   showPaytmPayDialog();
 
                             }else {
 
@@ -619,8 +762,8 @@ public class TrackYourRide extends Fragment implements
         alertDialog.show();
 
 
-        final EditText edt_payee_number = (EditText) dialogView.findViewById(R.id.edt_payee_number);
-        Button btn_pay_paytm = (Button) dialogView.findViewById(R.id.btn_pay_paytm);
+        final EditText edt_payee_number =  dialogView.findViewById(R.id.edt_payee_number);
+        Button btn_pay_paytm = dialogView.findViewById(R.id.btn_pay_paytm);
 
 
         btn_pay_paytm.setOnClickListener(new View.OnClickListener() {
@@ -634,7 +777,7 @@ public class TrackYourRide extends Fragment implements
                     return;
                 }else {
 
-                    updatePaytmNumber(alertDialog, edt_payee_number.getText().toString());
+                  //  updatePaytmNumber(alertDialog, edt_payee_number.getText().toString());
                 }
 
             }
@@ -645,6 +788,7 @@ public class TrackYourRide extends Fragment implements
     }
 
 
+/*
     public void updatePaytmNumber(final AlertDialog alertDialog, String number){
 
         Driver driver = sharedPref.getDriverData();
@@ -697,11 +841,13 @@ public class TrackYourRide extends Fragment implements
                                 startActivity(intent);
                             }
 
-                            /*Fragment fragment = new BookYourRide();
+                            */
+/*Fragment fragment = new BookYourRide();
                             ft = getFragmentManager().beginTransaction();
                             ft.replace(R.id.container, fragment);
                             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                            ft.commit();*/
+                            ft.commit();*//*
+
 
 
                         }else{
@@ -727,6 +873,7 @@ public class TrackYourRide extends Fragment implements
             }
         });
     }
+*/
 
 
     // Help ...
@@ -887,7 +1034,9 @@ public class TrackYourRide extends Fragment implements
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Driver driver = sharedPref.getDriverData();
+        Log.d(Constants.TAG, "Book ID: "+driver.getBooking_id());
         Call<FareDetails> call = apiService.get_fare_details(driver.getBooking_id()
+
         );
 
         call.enqueue(new retrofit2.Callback<FareDetails>() {
@@ -903,7 +1052,7 @@ public class TrackYourRide extends Fragment implements
 
 
                         if (response.body().getStatus() == 1){
-
+                            Log.d(Constants.TAG, "Fare Info: "+response.body().getFareInfo());
                             showRatingDialog(response.body().getFareInfo());
 
                         }

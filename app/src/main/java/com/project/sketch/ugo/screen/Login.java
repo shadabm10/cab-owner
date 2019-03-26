@@ -36,7 +36,7 @@ import retrofit2.Callback;
 
 public class Login extends AppCompatActivity {
 
-
+    String TAG="login";
     private EditText input_mobile, input_password;
     private Button action_signin;
     private TextView tv_forgot_password;
@@ -124,7 +124,7 @@ public class Login extends AppCompatActivity {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    Log.d("RYD", "PERMISSION_GRANTED >>>>");
+                    Log.d("UGO", "PERMISSION_GRANTED >>>>");
 
                 } else {
                     //code for deny
@@ -185,12 +185,7 @@ public class Login extends AppCompatActivity {
 
                         if (response.body().getStatus() == 1){
 
-                           // Log.d(Constants.TAG, "onResponse: " + response.body().getMessage());
-                          //  Log.d(Constants.TAG, "onResponse: " + response.body().getStatus());
-                          //  Log.d(Constants.TAG, "onResponse: " + response.body().getCustomerInfo().getName());
-                          //  Log.d(Constants.TAG, "onResponse: " + response.body().getCustomerInfo().getEmail());
-                          //  Log.d(Constants.TAG, "onResponse: " + response.body().getCustomerInfo().getPhone());
-                          //  Log.d(Constants.TAG, "onResponse: " + response.body().getCustomerInfo().getUid());
+                            Log.d(TAG, "onResponse: "+response.body().getStatus());
 
                             sharedPref.setFirstLogin(true);
 
@@ -201,7 +196,11 @@ public class Login extends AppCompatActivity {
                                     response.body().getCustomerInfo().getEmail(),
                                     response.body().getCustomerInfo().getPhone(),
                                     response.body().getCustomerInfo().getImage(),
-                                    response.body().getCustomerInfo().getCustomer_rating()
+                                    response.body().getCustomerInfo().getCustomer_rating(),
+                                    response.body().getCustomerInfo().getLogin_status(),
+                                    response.body().getCustomerInfo().getFcm_reg_token(),
+                                    response.body().getCustomerInfo().getDeviceid(),
+                                    response.body().getCustomerInfo().getDevice_type()
                             );
 
 

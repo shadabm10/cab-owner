@@ -56,6 +56,14 @@ public class Driver {
     @SerializedName("otp")
     private String otp;
 
+    @SerializedName("booking_status")
+    private String booking_status;
+
+    @SerializedName("pick_address")
+    private String pick_address;
+
+    @SerializedName("drop_address")
+    private String drop_address;
 
 
     public String getBooking_id() {
@@ -186,5 +194,29 @@ public class Driver {
 
     public void setOtp(String otp) {
         this.otp = otp;
+    }
+
+    public String getBooking_status() {
+        return booking_status;
+    }
+
+    public void setBooking_status(String booking_status) {
+        this.booking_status = booking_status;
+    }
+
+    public String getPick_address() {
+        return pick_address;
+    }
+
+    public void setPick_address(String pick_address) {
+        this.pick_address = pick_address;
+    }
+
+    public String getDrop_address() {
+        return drop_address;
+    }
+
+    public void setDrop_address(String drop_address) {
+        this.drop_address = drop_address;
     }
 }

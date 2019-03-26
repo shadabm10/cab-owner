@@ -60,8 +60,8 @@ public class HelpScreenActivity extends AppCompatActivity {
     BookHisSingle bookHisSingle;
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
 
-    String Appconfig="http://apps.mars-west.sws.sketchwebsolutions.net/P-1163-UGO/api/user_help";
-    ImageView image_delete;
+    String Appconfig="http://u-go.in/api/user_help";
+    ImageView back;
 
     String TAG="help";
     File p_image;
@@ -107,7 +107,7 @@ public class HelpScreenActivity extends AppCompatActivity {
         rider_image=findViewById(R.id.imageView);
         edt_description=findViewById(R.id.edt_description);
         ll_submit=findViewById(R.id.ll_submit);
-       // image_delete=findViewById(R.id.image_delete);
+        back=findViewById(R.id.back);
         setValues();
         attach_data.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,15 +128,14 @@ public class HelpScreenActivity extends AppCompatActivity {
 
             }
         });
-/*
-        image_delete.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               attach_data_name.setText("");
+                Intent i = new Intent(HelpScreenActivity.this, Container.class);
+                startActivity(i);
 
             }
         });
-*/
 
 
     }

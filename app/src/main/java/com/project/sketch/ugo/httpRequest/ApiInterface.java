@@ -20,6 +20,7 @@ import com.project.sketch.ugo.httpRequest.apiModel6.ResendOtpResponse;
 import com.project.sketch.ugo.httpRequest.apiModel7.CabDetailsResponse;
 import com.project.sketch.ugo.httpRequest.apiModel7.SpecialFareResponse;
 import com.project.sketch.ugo.httpRequest.apiModel8.FareDetails;
+import com.project.sketch.ugo.httpRequest.apiModel9.OngoingBooking;
 import com.project.sketch.ugo.utils.Constants;
 
 import okhttp3.MultipartBody;
@@ -257,6 +258,12 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constants.get_fare_details)
     Call<FareDetails> get_fare_details(@Field(Constants.booking_id) String booking_id);
+
+
+    @FormUrlEncoded
+    @POST(Constants.check_ongoing_booking)
+    Call<OngoingBooking> checkOngoingBookig(@Field(Constants.id) String id);
+
 
 }
 

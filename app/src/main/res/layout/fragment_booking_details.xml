@@ -317,6 +317,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/rl_21"
+                        android:visibility="gone"
                         android:animateLayoutChanges="true"
                         android:paddingTop="10dp"
                         >
@@ -344,12 +345,44 @@
 
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/rl_waiting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_21"
+
+                        android:animateLayoutChanges="true"
+                        android:paddingTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Waiting Fees:"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_waiting_fees"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_button_black1"
+                            android:text="Rs. 100.00"
+                            />
+
+
+
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/rl_311"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/rl_31"
+                        android:layout_below="@+id/rl_waiting"
                         android:animateLayoutChanges="true"
                         android:paddingTop="10dp"
                         >
@@ -452,6 +485,7 @@
                     </RelativeLayout>
 
 
+<!--
                     <RelativeLayout
                         android:id="@+id/rl_61"
                         android:layout_width="match_parent"
@@ -479,8 +513,10 @@
                             />
 
                     </RelativeLayout>
+-->
 
 
+<!--
                     <RelativeLayout
                         android:id="@+id/rl_71"
                         android:layout_width="match_parent"
@@ -512,6 +548,7 @@
 
 
                     </RelativeLayout>
+-->
 
 
 

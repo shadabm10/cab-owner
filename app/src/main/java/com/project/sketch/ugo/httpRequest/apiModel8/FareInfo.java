@@ -11,11 +11,33 @@ public class FareInfo {
     @SerializedName("total_fare")
     private double total_fare;
 
+    @SerializedName("coupon_amount")
+    private double coupon_amount;
+
+    @SerializedName("sub_total_fare")
+    private double sub_total_fare;
+
+    public double getCoupon_amount() {
+        return coupon_amount;
+    }
+
+    public void setCoupon_amount(double coupon_amount) {
+        this.coupon_amount = coupon_amount;
+    }
+
+
+
     @SerializedName("guide_charges")
     private double guide_charges;
 
     @SerializedName("commission_rate")
     private double commission_rate;
+
+    @SerializedName("gst_fair")
+    private double gst_fair;
+
+    @SerializedName("commission_fair")
+    private double commission_fair;
 
     @SerializedName("gst_rate")
     private double gst_rate;
@@ -25,6 +47,46 @@ public class FareInfo {
 
     @SerializedName("gst_rate_type")
     private String gst_rate_type;
+
+    public String getWaiting_fair() {
+        return waiting_fair;
+    }
+
+    public void setWaiting_fair(String waiting_fair) {
+        this.waiting_fair = waiting_fair;
+    }
+
+    @SerializedName("waiting_fair")
+    private String waiting_fair;
+
+    public double getSub_total_fare() {
+        return sub_total_fare;
+    }
+
+    public void setSub_total_fare(double sub_total_fare) {
+        this.sub_total_fare = sub_total_fare;
+    }
+
+
+
+    public double getGst_fair() {
+        return gst_fair;
+    }
+
+    public void setGst_fair(double gst_fair) {
+        this.gst_fair = gst_fair;
+    }
+
+
+    public double getCommission_fair() {
+        return commission_fair;
+    }
+
+    public void setCommission_fair(double commission_fair) {
+        this.commission_fair = commission_fair;
+    }
+
+
 
 
     public double getTotal_fare() {

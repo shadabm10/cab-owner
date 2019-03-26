@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.sketch.ugo.R;
 import com.project.sketch.ugo.httpRequest.ApiClient;
 import com.project.sketch.ugo.httpRequest.ApiInterface;
+import com.project.sketch.ugo.httpRequest.apiModel2.Cab;
 import com.project.sketch.ugo.httpRequest.apiModel3.BookHisSingle;
 import com.project.sketch.ugo.httpRequest.apiModel4.FeedbackRatingResponse;
 import com.project.sketch.ugo.utils.Constants;
@@ -69,14 +70,18 @@ public class BookingHistoryDetails extends AppCompatActivity implements OnMapRea
     CircleImageView imageView;
     TextView tv_invoiceNo, tv_driver_name, tv_car_name, tv_car_number, tv_status, tv_by_me;
     TextView tv_pickup_time, tv_pickup_address, tv_drop_time, tv_drop_address;
-    TextView tv_ride_fare, tv_guide_fees, tv_tax, tv_total, tv_payment_mode, tv_coupon_amt;
+    TextView tv_ride_fare, tv_guide_fees, tv_tax, tv_total, tv_payment_mode, tv_coupon_amt,tv_waiting_fees;
     TextView tv_roundOff, tv_g_total, tv_total_distance, tv_total_ride_time;
     RatingBar rating_driver;
-
+    float waiting_fee ;
+    float gst_amt ;
+    float total_new ;
     RelativeLayout rl1, rl_31, rl_coupon;
 
     LayerDrawable stars;
-
+    float subtotal;
+    float commission;
+    double grand_total;
     SharedPref sharedPref;
 
     @Override
@@ -114,6 +119,7 @@ public class BookingHistoryDetails extends AppCompatActivity implements OnMapRea
         imageView = (CircleImageView) findViewById(R.id.imageView);
         rating_driver = (RatingBar) findViewById(R.id.rating_driver);
         tv_invoiceNo = (TextView) findViewById(R.id.tv_invoiceNo);
+        tv_waiting_fees = (TextView) findViewById(R.id.tv_waiting_fees);
         tv_driver_name = (TextView) findViewById(R.id.tv_driver_name);
         tv_car_name = (TextView) findViewById(R.id.tv_car_name);
         tv_car_number = (TextView) findViewById(R.id.tv_car_number);
@@ -129,8 +135,8 @@ public class BookingHistoryDetails extends AppCompatActivity implements OnMapRea
         tv_guide_fees = (TextView) findViewById(R.id.tv_guide_fees);
         tv_total = (TextView) findViewById(R.id.tv_total);
         tv_payment_mode = (TextView) findViewById(R.id.tv_payment_mode);
-        tv_roundOff = (TextView) findViewById(R.id.tv_roundOff);
-        tv_g_total = (TextView) findViewById(R.id.tv_g_total);
+       // tv_roundOff = (TextView) findViewById(R.id.tv_roundOff);
+       // tv_g_total = (TextView) findViewById(R.id.tv_g_total);
         tv_coupon_amt = (TextView) findViewById(R.id.tv_coupon_amt);
         tv_total_distance = (TextView) findViewById(R.id.tv_total_distance);
         tv_total_ride_time = (TextView) findViewById(R.id.tv_total_ride_time);
@@ -215,9 +221,11 @@ public class BookingHistoryDetails extends AppCompatActivity implements OnMapRea
 
             getSupportActionBar().setTitle(getNewFormatDate(bookHisSingle.getCreated_date()));
 
+             subtotal = Float.parseFloat(bookHisSingle.getSub_total_amt());
+             commission = Float.parseFloat(bookHisSingle.getCommission_amt());
+             grand_total = subtotal + commission;
 
-
-            tv_ride_fare.setText("₹ "+bookHisSingle.getTotal_fare());
+            tv_ride_fare.setText("₹ "+df.format(grand_total));
             tv_guide_fees.setText("₹ "+bookHisSingle.getGuide_charges());
             tv_coupon_amt.setText("₹ "+df.format(bookHisSingle.getCoupon_amount()));
 
@@ -248,19 +256,22 @@ public class BookingHistoryDetails extends AppCompatActivity implements OnMapRea
                 }
 
 
-                float gst_rate = Float.parseFloat(bookHisSingle.getGst_rate());
+                 waiting_fee = Float.parseFloat(bookHisSingle.getWaiting_price());
+                 gst_amt = Float.parseFloat(bookHisSingle.getGst_amt());
+                 total_new = Float.parseFloat(bookHisSingle.getTotal_fare());
 
-                double tax_amount = total * (gst_rate);
+               // double tax_amount = total * (gst_rate);
 
-                tv_tax.setText("₹ "+df.format(tax_amount));
+                tv_tax.setText("₹ "+df.format(gst_amt));
+                tv_waiting_fees.setText("₹ "+df.format(waiting_fee));
 
-                double grand_total = tax_amount + total + guide_fee;
 
-                tv_total.setText("₹ "+df.format(grand_total));
 
-                calculateRoundOff(String.valueOf(df.format(grand_total)));
+                tv_total.setText("₹ "+df.format(total_new));
 
-                tv_g_total.setText("₹ "+df.format(Math.round(grand_total)));
+               // calculateRoundOff(String.valueOf(df.format(grand_total)));
+
+               // tv_g_total.setText("₹ "+df.format(Math.round(grand_total)));
 
 
                 rl1.setVisibility(View.VISIBLE);
@@ -460,6 +471,7 @@ public class BookingHistoryDetails extends AppCompatActivity implements OnMapRea
 
             MarkerOptions markerOptions1 = new MarkerOptions();
             markerOptions1.position(pick_latlong);
+
             markerOptions1.icon(BitmapDescriptorFactory.fromBitmap(globalClass.cab_image));
             map.addMarker(markerOptions1);
 
@@ -506,6 +518,7 @@ public class BookingHistoryDetails extends AppCompatActivity implements OnMapRea
 
     public void showRatingDialog(){
         rating_ = 0;
+        DecimalFormat df = new DecimalFormat();
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -521,8 +534,10 @@ public class BookingHistoryDetails extends AppCompatActivity implements OnMapRea
         stars.getDrawable(1).setColorFilter(Color.parseColor("#989898"), PorterDuff.Mode.SRC_ATOP); // for half filled stars
         stars.getDrawable(0).setColorFilter(Color.parseColor("#989898"), PorterDuff.Mode.SRC_ATOP); // for empty stars
 
-        final EditText edt_comment = (EditText) dialogView.findViewById(R.id.edt_comment);
-        Button btn_submit = (Button) dialogView.findViewById(R.id.btn_submit);
+        final EditText edt_comment =  dialogView.findViewById(R.id.edt_comment);
+        Button btn_submit =  dialogView.findViewById(R.id.btn_submit);
+        //TextView tv_fare =  dialogView.findViewById(R.id.tv_fare);
+
 
         rating_driver.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override

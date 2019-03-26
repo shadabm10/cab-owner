@@ -16,6 +16,8 @@ public class Constants {
     public static final int PickUp_Key = 300;
     public static final int DropUp_Key = 400;
     public static final int MaxOutstationDistance = 150;
+    public static final String key_pickup = "pickup";
+    public static final String key_drop = "drop";
 
 
     public static final String registration = "api/registration";
@@ -49,12 +51,17 @@ public class Constants {
     public static final String get_fare_details = "api/get_fare_details";
 
 
+    public static final String logout = "api/logout";
+    public static final String check_login = "api/check_login";
+    public static final String check_ongoing_booking = "api/check_ongoing_booking";
+
+
 
 
     /////////////////////////////////////////////////////
 
     public static final String paymentMode_cash = "cash";
-    public static final String paymentMode_paytm = "paytm";
+    public static final String paymentMode_Wallet = "wallet";
     public static final String paymentMode_jiomoney = "jio_money";
 
     public static final String device = "android";

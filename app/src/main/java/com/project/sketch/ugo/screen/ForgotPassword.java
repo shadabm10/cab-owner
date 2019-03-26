@@ -95,10 +95,10 @@ public class ForgotPassword extends AppCompatActivity {
         action_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*
+
                 if (!validationClass.validateOtp(input_otp))
-                    return;*/
-                if(input_otp.getText().toString().equalsIgnoreCase("123456")){
+                    return;
+              /*  if(input_otp.getText().toString().equalsIgnoreCase("123456")){
 
                     Toast.makeText(getApplicationContext(), "Mobile number successfully verified", Toast.LENGTH_LONG).show();
                     Registration.regActivity.finish();
@@ -107,9 +107,9 @@ public class ForgotPassword extends AppCompatActivity {
                 else {
                     Toast.makeText(getApplicationContext(), "Mobile number not verified", Toast.LENGTH_LONG).show();
 
-                }
+                }*/
 
-               // verifyOtp();
+               verifyOtp();
 
             }
         });

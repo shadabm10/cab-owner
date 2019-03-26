@@ -344,6 +344,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     >
                     <CheckBox
                         android:id="@+id/checkbox_guider"
@@ -358,6 +359,7 @@
 
                 <View
                     android:layout_width="1dp"
+                    android:visibility="gone"
                     android:layout_height="match_parent"
                     android:background="@color/lightgray"
                     />

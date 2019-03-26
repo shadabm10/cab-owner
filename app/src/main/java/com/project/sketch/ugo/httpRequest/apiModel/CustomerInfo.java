@@ -12,9 +12,29 @@ public class CustomerInfo {
     @SerializedName("uid")
     private String uid;
 
+
+
+    @SerializedName("deviceid")
+    private String deviceid;
+
+
     @SerializedName("name")
     private String name;
 
+
+
+    @SerializedName("device_type")
+    private String device_type;
+
+
+
+
+    @SerializedName("fcm_reg_token")
+    private String fcm_reg_token;
+
+
+    @SerializedName("login_status")
+    private String login_status;
 
     @SerializedName("email")
     private String email;
@@ -23,15 +43,35 @@ public class CustomerInfo {
     @SerializedName("phone")
     private String phone;
 
-
-
-
     @SerializedName("customer_rating")
     private String customer_rating;
 
     @SerializedName("image")
     private String image;
 
+    public String getLogin_status() {
+        return login_status;
+    }
+
+    public void setLogin_status(String login_status) {
+        this.login_status = login_status;
+    }
+
+
+
+
+
+
+
+
+
+    public String getDeviceid() {
+        return deviceid;
+    }
+
+    public void setDeviceid(String deviceid) {
+        this.deviceid = deviceid;
+    }
     public String getUid() {
         return uid;
     }
@@ -43,7 +83,19 @@ public class CustomerInfo {
     public String getName() {
         return name;
     }
+    public void setDevice_type(String device_type) {
+        this.device_type = device_type;
+    }
+    public String getFcm_reg_token() {
+        return fcm_reg_token;
+    }
 
+    public void setFcm_reg_token(String fcm_reg_token) {
+        this.fcm_reg_token = fcm_reg_token;
+    }
+    public String getDevice_type() {
+        return device_type;
+    }
     public void setName(String name) {
         this.name = name;
     }

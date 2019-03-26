@@ -1,5 +1,6 @@
 package com.project.sketch.ugo.screen;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -47,6 +48,7 @@ import com.project.sketch.ugo.fragments.TrackYourRide;
 import com.project.sketch.ugo.httpRequest.ApiClient;
 import com.project.sketch.ugo.httpRequest.ApiInterface;
 import com.project.sketch.ugo.httpRequest.apiModel4.CancelBooking;
+import com.project.sketch.ugo.httpRequest.apiModel9.OngoingBooking;
 import com.project.sketch.ugo.utils.Constants;
 import com.project.sketch.ugo.utils.GlobalClass;
 import com.project.sketch.ugo.utils.SharedPref;
@@ -76,7 +78,7 @@ public class Container extends AppCompatActivity {
 
     GlobalClass globalClass;
     SharedPref sharedPref;
-
+    private ProgressDialog pDialog;
 
     protected GoogleApiClient mGoogleApiClient;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
@@ -102,6 +104,10 @@ public class Container extends AppCompatActivity {
         globalClass = (GlobalClass) getApplicationContext();
         sharedPref = new SharedPref(this);
 
+        pDialog  = new ProgressDialog(Container.this);
+        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pDialog.setMessage("Please wait...");
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -123,12 +129,20 @@ public class Container extends AppCompatActivity {
 
 
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean enabledGPS = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isGpsEnable = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
 
         /////////////////////
 
-        if (sharedPref.isReachingThePickupLocation()){
+        if (!isGpsEnable){
+
+            enableLocation();
+
+        }
+
+       checkOnGoingBooking();
+
+       /* if (sharedPref.isReachingThePickupLocation()){
 
             fragment = new TrackYourRide();
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -136,19 +150,10 @@ public class Container extends AppCompatActivity {
 
         }else {
 
-            if (enabledGPS){
-
-                fragment = new BookYourRide();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-
-            }else {
-
-                enableLocation();
-            }
 
 
-        }
+
+        }*/
 
 
 
@@ -241,7 +246,6 @@ public class Container extends AppCompatActivity {
     }
 
 
-
     private void setupDrawerToggle1(){
 
         drawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.app_name, R.string.app_name) {
@@ -325,7 +329,6 @@ public class Container extends AppCompatActivity {
                 SpannableString span = new SpannableString(item.getTitle());
                 span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, span.length(), 0);
                 item.setTitle(span);
-
 
             }
 
@@ -623,83 +626,6 @@ public class Container extends AppCompatActivity {
         });
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-
-            case REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-
-                        enableLocation();
-                       // Log.i(Constants.TAG, "RESULT_OK");
-
-                        break;
-                    case Activity.RESULT_CANCELED:
-
-                       // Log.i(Constants.TAG, "RESULT_CANCELED");
-                        finish();
-
-                        break;
-                }
-                break;
-
-
-        }
-
-        Log.d(Constants.TAG, "###############3");
-    }*/
-
-
-    //////////////////////////////////////////////
-
-
-    private void sendHelpMail(){
-
-
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-
-        Call<CancelBooking> call = apiService.helpMail(
-                sharedPref.getUserId(),
-                sharedPref.getBookingId(),
-                ""
-        );
-
-        call.enqueue(new retrofit2.Callback<CancelBooking>() {
-            @Override
-            public void onResponse(Call<CancelBooking>call, retrofit2.Response<CancelBooking> response) {
-
-                Log.d(Constants.TAG, "onResponse: " + response.body().getMessage());
-                Log.d(Constants.TAG, "onResponse: " + response.body().getStatus());
-
-
-                if (response.body().getStatus() == 1){
-
-                    Toast.makeText(Container.this, ""+response.body().getMessage(), Toast.LENGTH_LONG).show();
-
-                }else if (response.body().getStatus() == 2){
-
-                    Toast.makeText(Container.this, ""+response.body().getMessage(), Toast.LENGTH_LONG).show();
-
-                }else {
-
-                    Toast.makeText(Container.this, ""+response.body().getMessage(), Toast.LENGTH_LONG).show();
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<CancelBooking>call, Throwable t) {
-                // Log error here since request failed
-                Log.e(Constants.TAG, t.toString());
-
-            }
-        });
-
-
-    }
-
 
     ///////////////////////////////////////////////////
 
@@ -732,6 +658,107 @@ public class Container extends AppCompatActivity {
         }, 3000);
     }
 
+
+    ///////////  Check if On going booking ....
+
+    public void checkOnGoingBooking(){
+
+        pDialog.show();
+
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<OngoingBooking> call = apiService.checkOngoingBookig(sharedPref.getUserId());
+
+        call.enqueue(new retrofit2.Callback<OngoingBooking>() {
+            @Override
+            public void onResponse(Call<OngoingBooking>call,
+                                   retrofit2.Response<OngoingBooking> response) {
+
+                try {
+
+                    if (response != null){
+
+                        Log.d(Constants.TAG, "onResponse: " + response.body().getMessage());
+                        Log.d(Constants.TAG, "onResponse: " + response.body().getStatus());
+
+                        if (response.body().getStatus() == 1){
+
+                            String booking_status = response.body().getDriver().getBooking_status();
+
+                            globalClass.setDriver(response.body().getDriver());
+
+                            if (booking_status.equals("accepted")){
+
+                                fragment = new BookYourRide();
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+
+                            }else if (booking_status.equals("reached")){
+
+                                fragment = new BookYourRide();
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+
+
+                            }else if (booking_status.equals("cancelled")){
+
+                                fragment = new BookYourRide();
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+
+
+                            }else if (booking_status.equals("started")){
+
+                                fragment = new TrackYourRide();
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+
+                            }else if (booking_status.equals("end")){
+
+
+                                fragment = new BookYourRide();
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+
+                            }
+
+
+                        }else if (response.body().getStatus() == 2){
+
+                            fragment = new BookYourRide();
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+
+                        }
+
+                        pDialog.dismiss();
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<OngoingBooking>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(Constants.TAG, t.toString());
+
+            }
+        });
+
+
+
+
+    }
 
 
 }

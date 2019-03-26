@@ -24,8 +24,23 @@ public class Cab {
     private String unselect_image;
 
 
+    public String getCab_type_name() {
+        return cab_type_name;
+    }
+
+    public void setCab_type_name(String cab_type_name) {
+        this.cab_type_name = cab_type_name;
+    }
+
+    @SerializedName("cab_type_name")
+    private String cab_type_name;
+
+
     @SerializedName("driver_Array")
     private List<Driver> driver_Array;
+
+
+
 
 
 

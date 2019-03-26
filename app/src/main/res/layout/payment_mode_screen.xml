@@ -8,6 +8,60 @@
         layout="@layout/toolbar"
         android:id="@+id/toolbar"
         />
+    <RelativeLayout
+        android:id="@+id/rl_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+
+        >
+
+        <TextView
+            android:id="@+id/tv_wallet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="@color/app_button_black1"
+            android:text="Wallet Amount"
+            />
+        <LinearLayout
+            android:id="@+id/ll_amt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_below="@+id/tv_wallet">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/rupess"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+          />
+        <TextView
+            android:id="@+id/tv_wallet_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:textColor="@color/app_button_black1"
+            android:text="00"
+            />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edt_add_amount"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_amt"
+            android:inputType="numberDecimal"
+            android:hint="EnterAmount want to add"
+            />
+
+    </RelativeLayout>
 
 
     <RelativeLayout
@@ -32,13 +86,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/radioCash"
             android:checked="true"
+            android:enabled="false"
             android:layout_alignParentRight="true"
             android:buttonTint="@color/green"
             >
         </RadioButton>
 
     </RelativeLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -46,29 +100,28 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         />
-
     <RelativeLayout
-        android:id="@+id/rl_paytm"
+        android:id="@+id/rl_wallet_amt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         >
 
         <TextView
-            android:id="@+id/tv_paytm"
+            android:id="@+id/tv_wallet_amt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textSize="16sp"
             android:textColor="@color/app_button_black1"
-            android:text="Paytm"
+            android:text="Wallet"
             />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioPaytm"
-            android:checked="true"
+            android:id="@+id/radioWallet"
+                android:enabled="false"
             android:layout_alignParentRight="true"
             android:buttonTint="@color/green"
             >
@@ -86,52 +139,23 @@
         />
 
 
-    <RelativeLayout
-        android:id="@+id/rl_JioMoney"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        >
-
-        <TextView
-            android:id="@+id/tv_JioMoney"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textSize="16sp"
-            android:textColor="@color/app_button_black1"
-            android:text="Jio Money"
-            />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/radioJioMoney"
-            android:checked="true"
-            android:layout_alignParentRight="true"
-            android:buttonTint="@color/green"
-            >
-        </RadioButton>
 
 
-    </RelativeLayout>
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lightgray"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        />
+
+
 
     <RelativeLayout
+        android:id="@+id/rl_add_money"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_marginTop="50dp"
-        android:animateLayoutChanges="true"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:padding="20dp"
+        android:visibility="gone"
+        android:layout_margin="20dp"
+        android:background="@drawable/blue_back"
+
         >
 
         <TextView
@@ -139,8 +163,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/red"
+            android:textColor="@color/white"
             android:gravity="center"
+            android:textSize="24dp"
+            android:text="Add money"
             />
 
     </RelativeLayout>
